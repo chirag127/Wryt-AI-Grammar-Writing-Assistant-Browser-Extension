@@ -17,10 +17,14 @@ async function loadSettings() {
     // Load preferences
     const toneSelect = document.getElementById("tone-select");
     const dialectSelect = document.getElementById("dialect-select");
+    const brandVoiceInput = document.getElementById("brand-voice-input");
+    const plagiarismCheck = document.getElementById("plagiarism-check");
 
     if (config.preferences) {
         toneSelect.value = config.preferences.tone || "neutral";
         dialectSelect.value = config.preferences.dialect || "us";
+        brandVoiceInput.value = config.preferences.brandVoice || "";
+        plagiarismCheck.checked = config.preferences.plagiarismCheck || false;
     }
 
     renderProviders(config.providers);
@@ -170,13 +174,15 @@ function addEventListeners() {
     // Preferences Event Listeners
     const toneSelect = document.getElementById("tone-select");
     const dialectSelect = document.getElementById("dialect-select");
+    const brandVoiceInput = document.getElementById("brand-voice-input");
+    const plagiarismCheck = document.getElementById("plagiarism-check");
 
-    if (toneSelect) {
-        toneSelect.addEventListener("change", saveSettings);
-    }
-    if (dialectSelect) {
-        dialectSelect.addEventListener("change", saveSettings);
-    }
+    if (toneSelect) toneSelect.addEventListener("change", saveSettings);
+    if (dialectSelect) dialectSelect.addEventListener("change", saveSettings);
+    if (brandVoiceInput)
+        brandVoiceInput.addEventListener("input", debouncedSave);
+    if (plagiarismCheck)
+        plagiarismCheck.addEventListener("change", saveSettings);
 }
 
 function debounce(func, wait) {
@@ -215,10 +221,14 @@ async function saveSettings() {
     // Get preferences
     const toneSelect = document.getElementById("tone-select");
     const dialectSelect = document.getElementById("dialect-select");
+    const brandVoiceInput = document.getElementById("brand-voice-input");
+    const plagiarismCheck = document.getElementById("plagiarism-check");
 
     const preferences = {
         tone: toneSelect?.value || "neutral",
         dialect: dialectSelect?.value || "us",
+        brandVoice: brandVoiceInput?.value || "",
+        plagiarismCheck: plagiarismCheck?.checked || false,
     };
 
     // Merge with existing config

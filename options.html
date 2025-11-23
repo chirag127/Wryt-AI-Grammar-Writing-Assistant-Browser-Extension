@@ -196,7 +196,14 @@
             >
                 Writing Preferences
             </h2>
-            <div style="display: flex; gap: 2rem; flex-wrap: wrap">
+            <div
+                style="
+                    display: flex;
+                    gap: 2rem;
+                    flex-wrap: wrap;
+                    margin-bottom: 1.5rem;
+                "
+            >
                 <div style="flex: 1; min-width: 200px">
                     <label
                         style="
@@ -251,6 +258,65 @@
                         <option value="ca">Canadian English</option>
                     </select>
                 </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem">
+                <label
+                    style="
+                        display: block;
+                        margin-bottom: 0.5rem;
+                        color: var(--text-muted);
+                        font-size: 0.875rem;
+                        font-weight: 600;
+                    "
+                    >Brand Voice Guidelines</label
+                >
+                <textarea
+                    id="brand-voice-input"
+                    placeholder="e.g., Use professional, empathetic, and concise language. Avoid jargon. Always refer to customers as 'partners'."
+                    style="
+                        width: 100%;
+                        padding: 0.75rem;
+                        border-radius: 6px;
+                        background: var(--bg);
+                        color: var(--text);
+                        border: 1px solid var(--border);
+                        min-height: 80px;
+                        font-family: inherit;
+                        resize: vertical;
+                    "
+                ></textarea>
+            </div>
+
+            <div>
+                <label
+                    style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.75rem;
+                        cursor: pointer;
+                    "
+                >
+                    <input
+                        type="checkbox"
+                        id="plagiarism-check"
+                        style="width: 1.25rem; height: 1.25rem"
+                    />
+                    <div>
+                        <span style="display: block; font-weight: 600"
+                            >Enable Originality & Cliché Check</span
+                        >
+                        <span
+                            style="
+                                display: block;
+                                font-size: 0.8rem;
+                                color: var(--text-muted);
+                            "
+                            >Flags overused phrases and potential unoriginal
+                            content (heuristic).</span
+                        >
+                    </div>
+                </label>
             </div>
         </div>
 

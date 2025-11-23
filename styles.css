@@ -332,6 +332,113 @@
     }
 }
 
+/* Premium Color System */
+.wryt-card.wryt-red {
+    border-left: 4px solid #ef4444;
+}
+.wryt-card.wryt-blue {
+    border-left: 4px solid #3b82f6;
+}
+.wryt-card.wryt-green {
+    border-left: 4px solid #22c55e;
+}
+.wryt-card.wryt-purple {
+    border-left: 4px solid #a855f7;
+}
+
+.wryt-badge-red {
+    background: #fee2e2;
+    color: #ef4444;
+}
+.wryt-badge-blue {
+    background: #dbeafe;
+    color: #3b82f6;
+}
+.wryt-badge-green {
+    background: #dcfce7;
+    color: #16a34a;
+}
+.wryt-badge-purple {
+    background: #f3e8ff;
+    color: #a855f7;
+}
+
+.wryt-premium-badge {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    margin-left: 8px;
+    display: inline-block;
+}
+
+.wryt-severity {
+    font-size: 10px;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-left: auto;
+}
+
+/* Highlight overlay for text */
+.wryt-highlight-overlay {
+    position: absolute;
+    border-bottom: 2px solid;
+    pointer-events: none;
+    z-index: 2147483646;
+    opacity: 0.5;
+}
+
+.wryt-highlight-red {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+.wryt-highlight-blue {
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+}
+.wryt-highlight-green {
+    border-color: #22c55e;
+    background: rgba(34, 197, 94, 0.1);
+}
+.wryt-highlight-purple {
+    border-color: #a855f7;
+    background: rgba(168, 85, 247, 0.1);
+}
+
+/* Filter Group Styles */
+.wryt-filter-group {
+    display: flex;
+    gap: 4px;
+    padding: 8px 16px;
+    overflow-x: auto;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.wryt-filter-btn {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: #64748b;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.wryt-filter-btn:hover {
+    background: #f1f5f9;
+}
+
+.wryt-filter-btn.active {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+}
+
 .hidden {
     display: none !important;
 }

@@ -89,6 +89,8 @@ const DEFAULT_CONFIG = {
     preferences: {
         tone: "neutral",
         dialect: "us",
+        brandVoice: "",
+        plagiarismCheck: false,
     },
 };
 
@@ -99,7 +101,7 @@ chrome.runtime.onInstalled.addListener(async () => {
         await chrome.storage.sync.set({ config: DEFAULT_CONFIG });
         console.log("Wryt: Default configuration initialized.");
     } else {
-        // Merge new providers/models into existing config if needed
+        // Merge new providers/models/preferences into existing config
         const updatedProviders = DEFAULT_CONFIG.providers.map((defProvider) => {
             const existing = config.providers.find(
                 (p) => p.id === defProvider.id
@@ -113,8 +115,17 @@ chrome.runtime.onInstalled.addListener(async () => {
             }
             return defProvider;
         });
+
+        const updatedPreferences = {
+            ...DEFAULT_CONFIG.preferences,
+            ...(config.preferences || {}),
+        };
+
         await chrome.storage.sync.set({
-            config: { providers: updatedProviders },
+            config: {
+                providers: updatedProviders,
+                preferences: updatedPreferences,
+            },
         });
     }
 
@@ -123,6 +134,12 @@ chrome.runtime.onInstalled.addListener(async () => {
         id: "check-grammar",
         title: "Check Grammar & Spelling",
         contexts: ["selection"],
+    });
+
+    chrome.contextMenus.create({
+        id: "generate-text",
+        title: "Write with AI...",
+        contexts: ["editable"],
     });
 });
 
@@ -133,6 +150,10 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
             action: "contextMenuCheck",
             text: info.selectionText,
         });
+    } else if (info.menuItemId === "generate-text") {
+        chrome.tabs.sendMessage(tab.id, {
+            action: "openGenerator",
+        });
     }
 });
 
@@ -140,6 +161,12 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "checkGrammar") {
         handleGrammarCheck(request.text)
+            .then((response) => sendResponse(response))
+            .catch((error) => sendResponse({ error: error.message }));
+        return true;
+    }
+    if (request.action === "generateText") {
+        handleTextGeneration(request.prompt, request.context)
             .then((response) => sendResponse(response))
             .catch((error) => sendResponse({ error: error.message }));
         return true;
@@ -185,7 +212,7 @@ async function handleGrammarCheck(text) {
             console.log(
                 `Attempting provider: ${provider.name} (${provider.model})`
             );
-            const result = await callProviderApi(provider, text);
+            const result = await callProviderApi(provider, text, "analyze");
             return {
                 ...result,
                 provider: provider.name,
@@ -204,31 +231,62 @@ async function handleGrammarCheck(text) {
     );
 }
 
+async function handleTextGeneration(promptText, contextText) {
+    const { config } = await chrome.storage.sync.get("config");
+    if (!config || !config.providers)
+        throw new Error("Configuration not loaded.");
+
+    const activeProviders = config.providers
+        .filter((p) => p.enabled && p.apiKey)
+        .sort((a, b) => a.priority - b.priority);
+
+    if (activeProviders.length === 0) {
+        return {
+            error: "No active providers configured.",
+        };
+    }
+
+    let lastError = null;
+
+    for (const provider of activeProviders) {
+        try {
+            const result = await callProviderApi(
+                provider,
+                promptText,
+                "generate",
+                contextText
+            );
+            return {
+                ...result,
+                provider: provider.name,
+            };
+        } catch (error) {
+            lastError = error;
+        }
+    }
+    throw new Error(
+        `All providers failed. Last error: ${
+            lastError?.message || "Unknown error"
+        }`
+    );
+}
+
 // Generic API Caller
-async function callProviderApi(provider, text) {
+async function callProviderApi(provider, text, mode = "analyze", context = "") {
     switch (provider.id) {
         case "gemini":
-            return await callGemini(provider, text);
+            return await callGemini(provider, text, mode, context);
         case "groq":
         case "cerebras":
         case "sambanova":
         case "openrouter":
-            return await callOpenAICompatible(provider, text);
+            return await callOpenAICompatible(provider, text, mode, context);
         default:
             throw new Error(`Unknown provider type: ${provider.id}`);
     }
 }
 
-// Gemini Handler
-async function callGemini(provider, text) {
-    const url =
-        provider.endpoint.replace("[MODEL_ID]", provider.model) +
-        `?key=${provider.apiKey}`;
-
-    const { config } = await chrome.storage.sync.get("config");
-    const tone = config?.preferences?.tone || "neutral";
-    const dialect = config?.preferences?.dialect || "us";
-
+function buildAnalysisPrompt(text, tone, dialect, brandVoice, plagiarismCheck) {
     const toneMap = {
         formal: "Formal and professional",
         casual: "Casual and conversational",
@@ -241,36 +299,165 @@ async function callGemini(provider, text) {
         ca: "Canadian English spelling and conventions",
     };
 
-    const prompt = `
-    You are an expert grammar and style editor.
-    Analyze the following text and provide corrections for grammar, spelling, punctuation, clarity, and tone.
-
-    **Writing Preferences:**
-    - Tone: ${toneMap[tone]}
-    - Dialect: ${dialectMap[dialect]}
-
-    Return a JSON object with the following structure:
-    {
-        "correctedText": "The fully corrected text",
-        "changes": [
-            {
-                "type": "grammar" | "spelling" | "punctuation" | "clarity" | "tone",
-                "original": "The original text segment",
-                "replacement": "The replacement text",
-                "explanation": "Why this change was made"
-            }
-        ]
+    let brandVoiceSection = "";
+    if (brandVoice && brandVoice.trim() !== "") {
+        brandVoiceSection = `
+**BRAND VOICE GUIDELINES (STRICTLY ENFORCE):**
+${brandVoice}
+`;
     }
 
-    Text: "${text}"
-  `;
+    let plagiarismSection = "";
+    if (plagiarismCheck) {
+        plagiarismSection = `
+5. **ORIGINALITY** (Orange):
+   - Flag clichés and overused idioms
+   - Flag generic, robotic, or "AI-sounding" phrasing
+   - Flag famous quotes or likely plagiarized common phrases (heuristic check)
+`;
+    }
+
+    return `You are a PREMIUM writing analysis engine matching Grammarly Premium sophistication.
+
+**ANALYSIS REQUIREMENTS:**
+1. Detect context: Is this formal (email/report), casual (chat), or academic?
+2. Analyze tone: Confident, Anxious, Aggressive, Formal, Optimistic, etc.
+3. Calculate readability score (0-100) based on sentence complexity
+
+**USER PREFERENCES:**
+- Target Tone: ${toneMap[tone]}
+- Dialect: ${dialectMap[dialect]}
+${brandVoiceSection}
+
+**5-TIER ERROR CATEGORIZATION:**
+
+1. **CRITICAL_GRAMMAR** (Red):
+   - Spelling errors, typos
+   - Subject-verb disagreement
+   - Punctuation mistakes
+   - Article errors (a/an/the)
+
+2. **CLARITY** (Blue):
+   - Passive voice → Active voice
+   - Wordy phrases → Concise alternatives
+   - Complex/ambiguous sentences → Simplified versions
+   - Vague pronouns
+
+3. **ENGAGEMENT** (Green):
+   - Overused words ("very", "really", "just")
+   - Repetitive vocabulary
+   - Dull/generic phrasing → Vivid alternatives
+   - Clichés and filler words
+
+4. **DELIVERY_TONE** (Purple):
+   - Politeness issues (too aggressive/blunt)
+   - Hedging language ("I think", "maybe", "possibly")
+   - Formality mismatches
+   - Confidence issues
+${plagiarismSection}
+
+**PREMIUM FEATURES (MANDATORY):**
+- Provide FULL sentence rewrites for clunky sentences
+- Flag grammatically correct but unnatural phrasing (fluency)
+- Suggest tone shifts when needed
+- **Rewrite full sentences** to improve flow while maintaining meaning.
+
+**OUTPUT (STRICT JSON):**
+{
+  "analysis_meta": {
+    "detected_tone": "Formal",
+    "readability_score": 75,
+    "audience_type": "General",
+    "text_length": 150
+  },
+  "correctedText": "The fully corrected text",
+  "corrections": [
+    {
+      "type": "CRITICAL_GRAMMAR|CLARITY|ENGAGEMENT|DELIVERY_TONE|ORIGINALITY",
+      "severity": "Critical|Advanced",
+      "original": "exact text segment",
+      "replacement": "corrected version",
+      "explanation": "Brief reason (max 15 words)",
+      "premium_tag": true,
+      "start_offset": 0,
+      "end_offset": 10,
+      "color_code": "red|blue|green|purple|orange"
+    }
+  ],
+  "rewrite_suggestion": "Full paragraph rewrite if needed for better flow",
+  "tone_adjustments": [
+    {
+      "issue": "Too anxious",
+      "suggestion": "Remove hedging words like 'maybe' and 'I think'"
+    }
+  ]
+}
+
+**TEXT TO ANALYZE:**
+"${text}"
+
+RESPOND WITH VALID JSON ONLY. NO EXPLANATIONS.`;
+}
+
+function buildGenerationPrompt(promptText, contextText, tone, brandVoice) {
+    let brandVoiceSection = "";
+    if (brandVoice && brandVoice.trim() !== "") {
+        brandVoiceSection = `
+**BRAND VOICE GUIDELINES:**
+${brandVoice}
+`;
+    }
+
+    return `You are an expert AI writing assistant.
+
+**TASK:**
+Generate text based on the following user prompt: "${promptText}"
+
+**CONTEXT:**
+The user is writing in this context (if available): "${contextText}"
+
+**PREFERENCES:**
+- Tone: ${tone}
+${brandVoiceSection}
+
+**OUTPUT:**
+Return ONLY the generated text. Do not include "Here is the text" or quotes around the output. Just the raw text ready to be inserted.`;
+}
+
+// Gemini Handler
+async function callGemini(provider, text, mode, context) {
+    const url =
+        provider.endpoint.replace("[MODEL_ID]", provider.model) +
+        `?key=${provider.apiKey}`;
+
+    const { config } = await chrome.storage.sync.get("config");
+    const tone = config?.preferences?.tone || "neutral";
+    const dialect = config?.preferences?.dialect || "us";
+    const brandVoice = config?.preferences?.brandVoice || "";
+    const plagiarismCheck = config?.preferences?.plagiarismCheck || false;
+
+    let prompt;
+    if (mode === "generate") {
+        prompt = buildGenerationPrompt(text, context, tone, brandVoice);
+    } else {
+        prompt = buildAnalysisPrompt(
+            text,
+            tone,
+            dialect,
+            brandVoice,
+            plagiarismCheck
+        );
+    }
 
     const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { response_mime_type: "application/json" },
+            generationConfig: {
+                response_mime_type:
+                    mode === "analyze" ? "application/json" : "text/plain",
+            },
         }),
     });
 
@@ -288,6 +475,10 @@ async function callGemini(provider, text) {
 
     if (!rawText) throw new Error("Gemini returned empty response.");
 
+    if (mode === "generate") {
+        return { generatedText: rawText.trim() };
+    }
+
     try {
         return JSON.parse(rawText);
     } catch (e) {
@@ -298,46 +489,25 @@ async function callGemini(provider, text) {
 }
 
 // OpenAI-Compatible Handler
-async function callOpenAICompatible(provider, text) {
+async function callOpenAICompatible(provider, text, mode, context) {
     const { config } = await chrome.storage.sync.get("config");
     const tone = config?.preferences?.tone || "neutral";
     const dialect = config?.preferences?.dialect || "us";
+    const brandVoice = config?.preferences?.brandVoice || "";
+    const plagiarismCheck = config?.preferences?.plagiarismCheck || false;
 
-    const toneMap = {
-        formal: "Formal and professional",
-        casual: "Casual and conversational",
-        neutral: "Neutral",
-    };
-
-    const dialectMap = {
-        us: "US English spelling and conventions",
-        uk: "UK English spelling and conventions",
-        ca: "Canadian English spelling and conventions",
-    };
-
-    const prompt = `
-    You are an expert grammar and style editor.
-    Analyze the following text and provide corrections for grammar, spelling, punctuation, clarity, and tone.
-
-    **Writing Preferences:**
-    - Tone: ${toneMap[tone]}
-    - Dialect: ${dialectMap[dialect]}
-
-    Return a JSON object with the following structure:
-    {
-        "correctedText": "The fully corrected text",
-        "changes": [
-            {
-                "type": "grammar" | "spelling" | "punctuation" | "clarity" | "tone",
-                "original": "The original text segment",
-                "replacement": "The replacement text",
-                "explanation": "Why this change was made"
-            }
-        ]
+    let prompt;
+    if (mode === "generate") {
+        prompt = buildGenerationPrompt(text, context, tone, brandVoice);
+    } else {
+        prompt = buildAnalysisPrompt(
+            text,
+            tone,
+            dialect,
+            brandVoice,
+            plagiarismCheck
+        );
     }
-
-    Text: "${text}"
-  `;
 
     const headers = {
         "Content-Type": "application/json",
@@ -349,22 +519,29 @@ async function callOpenAICompatible(provider, text) {
         headers["X-Title"] = "Wryt";
     }
 
+    const body = {
+        model: provider.model,
+        messages: [
+            {
+                role: "system",
+                content:
+                    mode === "analyze"
+                        ? "You are a helpful grammar assistant. You MUST return valid JSON."
+                        : "You are a helpful writing assistant.",
+            },
+            { role: "user", content: prompt },
+        ],
+        temperature: 0.3,
+    };
+
+    if (mode === "analyze") {
+        body.response_format = { type: "json_object" };
+    }
+
     const response = await fetch(provider.endpoint, {
         method: "POST",
         headers: headers,
-        body: JSON.stringify({
-            model: provider.model,
-            messages: [
-                {
-                    role: "system",
-                    content:
-                        "You are a helpful grammar assistant. You MUST return valid JSON.",
-                },
-                { role: "user", content: prompt },
-            ],
-            temperature: 0.3,
-            response_format: { type: "json_object" },
-        }),
+        body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -380,6 +557,10 @@ async function callOpenAICompatible(provider, text) {
     const rawText = data.choices?.[0]?.message?.content;
 
     if (!rawText) throw new Error(`${provider.name} returned empty response.`);
+
+    if (mode === "generate") {
+        return { generatedText: rawText.trim() };
+    }
 
     try {
         return JSON.parse(rawText);
@@ -403,7 +584,7 @@ async function testProviderConnection(providerId, apiKey, model) {
     };
 
     try {
-        await callProviderApi(testProvider, "Hello world");
+        await callProviderApi(testProvider, "Hello world", "analyze");
         return { success: true };
     } catch (error) {
         return { success: false, error: error.message };
