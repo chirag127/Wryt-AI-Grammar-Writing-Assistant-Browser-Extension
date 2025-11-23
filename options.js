@@ -23,6 +23,14 @@ function renderProviders(providers) {
     // Sort by priority
     providers.sort((a, b) => a.priority - b.priority);
 
+    const providerLinks = {
+        gemini: "https://aistudio.google.com/app/apikey",
+        groq: "https://console.groq.com/keys",
+        cerebras: "https://cloud.cerebras.ai/",
+        sambanova: "https://cloud.sambanova.ai/",
+        openrouter: "https://openrouter.ai/keys",
+    };
+
     providers.forEach((provider) => {
         const item = document.createElement("div");
         item.className = "provider-item";
@@ -69,9 +77,14 @@ function renderProviders(providers) {
         </label>
       </div>
       <div class="input-group">
-        <input type="password" placeholder="API Key" value="${
-            provider.apiKey || ""
-        }" class="api-key-input">
+        <div style="flex: 1; display: flex; gap: 0.5rem; align-items: center;">
+            <input type="password" placeholder="API Key" value="${
+                provider.apiKey || ""
+            }" class="api-key-input">
+            <a href="${
+                providerLinks[provider.id] || "#"
+            }" target="_blank" title="Get API Key" style="color: var(--primary); text-decoration: none; font-size: 0.8rem; white-space: nowrap;">Get Key ↗</a>
+        </div>
 
         <div class="model-select-wrapper" style="flex: 1; display: flex; gap: 0.5rem;">
           <select class="model-select" style="flex: 1; padding: 0.75rem; border-radius: 6px; background: var(--bg); color: var(--text); border: 1px solid var(--border);">
@@ -126,8 +139,33 @@ function addEventListeners() {
                 input.style.display = "none";
                 input.value = e.target.value;
             }
+            saveSettings(); // Auto-save on select change
         });
     });
+
+    // Auto-save Event Listeners
+    const debouncedSave = debounce(saveSettings, 500);
+
+    document.querySelectorAll(".api-key-input").forEach((input) => {
+        input.addEventListener("input", debouncedSave);
+    });
+
+    document.querySelectorAll(".model-input").forEach((input) => {
+        input.addEventListener("input", debouncedSave);
+    });
+
+    document.querySelectorAll(".enable-check").forEach((check) => {
+        check.addEventListener("change", saveSettings);
+    });
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function (...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
 }
 
 async function saveSettings() {
@@ -165,7 +203,11 @@ async function saveSettings() {
 
     const originalText = saveBtn.innerText;
     saveBtn.innerText = "Saved!";
-    setTimeout(() => (saveBtn.innerText = originalText), 2000);
+    saveBtn.style.backgroundColor = "var(--success)";
+    setTimeout(() => {
+        saveBtn.innerText = originalText;
+        saveBtn.style.backgroundColor = "";
+    }, 1500);
 }
 
 async function testConnection(providerId, apiKey, model) {
