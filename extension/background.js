@@ -342,6 +342,7 @@ ${brandVoiceSection}
    - Wordy phrases → Concise alternatives
    - Complex/ambiguous sentences → Simplified versions
    - Vague pronouns
+   - **SPEECH ARTIFACTS**: Remove self-corrections ("I want no I need"), repetitions ("the the"), and filler words ("um", "like").
 
 3. **ENGAGEMENT** (Green):
    - Overused words ("very", "really", "just")
@@ -361,6 +362,14 @@ ${plagiarismSection}
 - Flag grammatically correct but unnatural phrasing (fluency)
 - Suggest tone shifts when needed
 - **Rewrite full sentences** to improve flow while maintaining meaning.
+
+**SPEECH-TO-TEXT CLEANUP (PRIORITY):**
+The user is likely using speech-to-text software. You MUST detect and fix these specific dictation errors:
+- **Immediate Repetitions**: "the the", "is is".
+- **Self-Corrections**: "I want to go to the store no I want to go to the park" -> "I want to go to the park".
+- **Filler Words**: "um", "uh", "like" (if they disrupt flow).
+- **Homophones**: "write" vs "right", "their" vs "there".
+- **Punctuation**: Add missing punctuation typical of dictated text (run-on sentences).
 
 **OUTPUT (STRICT JSON):**
 {
