@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Wryt Extension Test Harness</title>
+        <style>
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f0f2f5;
+                color: #333;
+            }
+            h1 {
+                color: #4f46e5;
+            }
+            .section {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+            }
+            label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 600;
+            }
+            textarea,
+            input[type="text"],
+            .editable-div {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                margin-bottom: 10px;
+                font-size: 16px;
+                box-sizing: border-box;
+            }
+            textarea {
+                height: 100px;
+                resize: vertical;
+            }
+            .editable-div {
+                min-height: 100px;
+                background: #fff;
+                border: 1px solid #ccc;
+            }
+            .instruction {
+                font-size: 0.9em;
+                color: #666;
+                margin-bottom: 15px;
+                background: #eef2ff;
+                padding: 10px;
+                border-left: 4px solid #4f46e5;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>⚡ Wryt Test Harness</h1>
+        <p>
+            Use this page to verify the functionality of the Wryt Grammar &
+            Spell Checker extension.
+        </p>
+
+        <div class="section">
+            <h2>1. Textarea Input</h2>
+            <div class="instruction">
+                <strong>Test:</strong> Type or paste text with errors below.
+                Wait 1.5s for the "Magic Card" to appear.<br />
+                <strong>Sample:</strong> "Their is a lot of misstakes in this
+                sentance. I want to go to the store but i dont have no money."
+            </div>
+            <label for="test-textarea">Standard Textarea:</label>
+            <textarea id="test-textarea" placeholder="Type here..."></textarea>
+        </div>
+
+        <div class="section">
+            <h2>2. Input Field</h2>
+            <div class="instruction">
+                <strong>Test:</strong> Check single-line inputs.<br />
+                <strong>Sample:</strong> "He dont know nothing about it."
+            </div>
+            <label for="test-input">Text Input:</label>
+            <input type="text" id="test-input" placeholder="Type here..." />
+        </div>
+
+        <div class="section">
+            <h2>3. ContentEditable Div</h2>
+            <div class="instruction">
+                <strong>Test:</strong> Rich text editors often use
+                contenteditable divs.<br />
+                <strong>Sample:</strong> "She run fast yesterday."
+            </div>
+            <label>ContentEditable Element:</label>
+            <div class="editable-div" contenteditable="true"></div>
+        </div>
+
+        <div class="section">
+            <h2>4. Context Menu Test</h2>
+            <div class="instruction">
+                <strong>Test:</strong> Highlight the text below, right-click,
+                and select "Check Grammar & Spelling".
+            </div>
+            <div
+                style="padding: 15px; background: #fff; border: 1px dashed #999"
+            >
+                The quick brown fox jumps over the lazy dog but he tripped and
+                fell down. Its a disaster.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>5. Long Text Differential Check</h2>
+            <div class="instruction">
+                <strong>Test:</strong> Paste a long paragraph. Wryt should
+                handle it gracefully (though differential checking optimization
+                is a future task).
+            </div>
+            <textarea style="height: 150px">
+Artificial Intelligence is changing the world rapidly. However there are many challenges that needs to be addressed. Privacy concerns is one of the major issue. Also, the bias in data can lead to unfair outcomes. We must ensuring that AI is developed responsibly.
+        </textarea
+            >
+        </div>
+    </body>
+</html>
