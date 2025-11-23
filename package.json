@@ -1,0 +1,17 @@
+{
+    "name": "wryt-extension",
+    "version": "1.0.0",
+    "description": "Wryt Extension Assets",
+    "scripts": {
+        "generate-icons": "ts-node scripts/generate-icons.ts"
+    },
+    "dependencies": {
+        "sharp": "^0.33.2"
+    },
+    "devDependencies": {
+        "typescript": "^5.3.3",
+        "ts-node": "^10.9.2",
+        "@types/node": "^20.11.19",
+        "@types/sharp": "^0.31.1"
+    }
+}

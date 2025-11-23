@@ -1,0 +1,108 @@
+/* OpenGrammar Ultimate - Shadow DOM Styles */
+
+.og-tooltip {
+    position: absolute;
+    z-index: 2147483647; /* Max Z-Index */
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #1e293b;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.og-tooltip.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+}
+
+.og-content {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    width: 320px;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.og-header {
+    background: linear-gradient(to right, #6366f1, #8b5cf6);
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.og-logo {
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.og-close {
+    cursor: pointer;
+    font-size: 18px;
+    opacity: 0.8;
+}
+
+.og-close:hover {
+    opacity: 1;
+}
+
+.og-body {
+    padding: 12px;
+}
+
+.og-original {
+    color: #ef4444;
+    text-decoration: line-through;
+    opacity: 0.7;
+    margin-bottom: 4px;
+    font-size: 13px;
+}
+
+.og-arrow {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 12px;
+    margin: 2px 0;
+}
+
+.og-suggestion {
+    color: #22c55e;
+    font-weight: 500;
+}
+
+.og-actions {
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.og-btn {
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.og-btn:hover {
+    background: #4f46e5;
+}
+
+.og-attribution {
+    font-size: 10px;
+    color: #94a3b8;
+}
