@@ -3,8 +3,8 @@ import fs from "fs";
 import path from "path";
 
 const SIZES = [16, 48, 128];
-const INPUT_FILE = path.join(__dirname, "../icons/icon.svg");
-const OUTPUT_DIR = path.join(__dirname, "../icons");
+const INPUT_FILE = path.join(__dirname, "../extension/icons/icon.svg");
+const OUTPUT_DIR = path.join(__dirname, "../extension/icons");
 
 async function generateIcons() {
     if (!fs.existsSync(INPUT_FILE)) {

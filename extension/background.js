@@ -356,7 +356,7 @@ ${brandVoiceSection}
    - Confidence issues
 ${plagiarismSection}
 
-**PREMIUM FEATURES (MANDATORY):**
+**ADVANCED FEATURES (MANDATORY):**
 - Provide FULL sentence rewrites for clunky sentences
 - Flag grammatically correct but unnatural phrasing (fluency)
 - Suggest tone shifts when needed
@@ -378,7 +378,6 @@ ${plagiarismSection}
       "original": "exact text segment",
       "replacement": "corrected version",
       "explanation": "Brief reason (max 15 words)",
-      "premium_tag": true,
       "start_offset": 0,
       "end_offset": 10,
       "color_code": "red|blue|green|purple|orange"
