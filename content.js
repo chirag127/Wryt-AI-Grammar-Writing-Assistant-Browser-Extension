@@ -106,10 +106,19 @@ function showLoadingState(target) {
     console.log("Checking grammar...");
 }
 
-function showSuggestion(target, original, corrected, providerName) {
+function showSuggestion(targetOrRect, original, corrected, providerName) {
     currentSuggestion = corrected;
 
-    const rect = target.getBoundingClientRect();
+    let rect;
+    if (
+        targetOrRect instanceof DOMRect ||
+        (targetOrRect.top !== undefined && targetOrRect.left !== undefined)
+    ) {
+        rect = targetOrRect;
+    } else {
+        rect = targetOrRect.getBoundingClientRect();
+    }
+
     tooltip.style.top = `${rect.bottom + window.scrollY + 5}px`;
     tooltip.style.left = `${rect.left + window.scrollX}px`;
 
@@ -119,6 +128,10 @@ function showSuggestion(target, original, corrected, providerName) {
         ".og-attribution"
     ).textContent = `Fixed by ${providerName}`;
 
+    // Update button text based on target
+    const btn = shadow.querySelector(".og-fix-btn");
+    btn.textContent = currentTarget ? "Fix it" : "Copy";
+
     tooltip.classList.remove("hidden");
 }
 
@@ -127,25 +140,35 @@ function hideTooltip() {
 }
 
 function applyFix() {
-    if (!currentTarget || !currentSuggestion) return;
+    if (!currentSuggestion) return;
 
-    if (
-        currentTarget.tagName === "TEXTAREA" ||
-        currentTarget.tagName === "INPUT"
-    ) {
-        currentTarget.value = currentSuggestion;
+    if (currentTarget) {
+        if (
+            currentTarget.tagName === "TEXTAREA" ||
+            currentTarget.tagName === "INPUT"
+        ) {
+            currentTarget.value = currentSuggestion;
+        } else {
+            currentTarget.innerText = currentSuggestion;
+        }
+
+        // Flash success
+        const originalBorder = currentTarget.style.borderColor;
+        currentTarget.style.borderColor = "#22c55e";
+        setTimeout(() => {
+            currentTarget.style.borderColor = originalBorder;
+        }, 1000);
     } else {
-        currentTarget.innerText = currentSuggestion;
+        // Copy to clipboard
+        navigator.clipboard.writeText(currentSuggestion).then(() => {
+            const btn = shadow.querySelector(".og-fix-btn");
+            const originalText = btn.textContent;
+            btn.textContent = "Copied!";
+            setTimeout(() => (btn.textContent = originalText), 1000);
+        });
     }
 
-    hideTooltip();
-
-    // Flash success
-    const originalBorder = currentTarget.style.borderColor;
-    currentTarget.style.borderColor = "#22c55e";
-    setTimeout(() => {
-        currentTarget.style.borderColor = originalBorder;
-    }, 1000);
+    if (currentTarget) hideTooltip();
 }
 
 async function handleContextMenuCheck(text) {
@@ -161,13 +184,9 @@ async function handleContextMenuCheck(text) {
         target = target.parentElement;
     }
 
-    if (!target) {
-        console.warn("No editable target found for selection.");
-    } else {
-        currentTarget = target;
-    }
+    currentTarget = target || null; // Set to null if not found
 
-    showLoadingState(target);
+    showLoadingState(target); // Safe to pass null
 
     try {
         const response = await chrome.runtime.sendMessage({
@@ -181,19 +200,12 @@ async function handleContextMenuCheck(text) {
         }
 
         if (response.correctedText && response.correctedText !== text) {
-            currentSuggestion = response.correctedText;
-
-            tooltip.style.top = `${rect.bottom + window.scrollY + 5}px`;
-            tooltip.style.left = `${rect.left + window.scrollX}px`;
-
-            shadow.querySelector(".og-original").textContent = text;
-            shadow.querySelector(".og-suggestion").textContent =
-                response.correctedText;
-            shadow.querySelector(
-                ".og-attribution"
-            ).textContent = `Fixed by ${response.provider}`;
-
-            tooltip.classList.remove("hidden");
+            showSuggestion(
+                currentTarget || rect, // Pass rect if no target
+                text,
+                response.correctedText,
+                response.provider
+            );
         }
     } catch (err) {
         console.error("Wryt Communication Error:", err);
