@@ -86,6 +86,10 @@ const DEFAULT_CONFIG = {
             ],
         },
     ],
+    preferences: {
+        tone: "neutral",
+        dialect: "us",
+    },
 };
 
 // Initialize Storage on Install
@@ -150,6 +154,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             .catch((error) =>
                 sendResponse({ success: false, error: error.message })
             );
+        return true;
+    }
+    if (request.action === "openOptions") {
+        chrome.runtime.openOptionsPage();
         return true;
     }
 });
@@ -217,11 +225,42 @@ async function callGemini(provider, text) {
         provider.endpoint.replace("[MODEL_ID]", provider.model) +
         `?key=${provider.apiKey}`;
 
+    const { config } = await chrome.storage.sync.get("config");
+    const tone = config?.preferences?.tone || "neutral";
+    const dialect = config?.preferences?.dialect || "us";
+
+    const toneMap = {
+        formal: "Formal and professional",
+        casual: "Casual and conversational",
+        neutral: "Neutral",
+    };
+
+    const dialectMap = {
+        us: "US English spelling and conventions",
+        uk: "UK English spelling and conventions",
+        ca: "Canadian English spelling and conventions",
+    };
+
     const prompt = `
     You are an expert grammar and style editor.
-    Fix the grammar, spelling, and punctuation of the following text.
-    Improve clarity and flow, but keep the original tone.
-    Return ONLY the corrected text. Do not add quotes or preambles.
+    Analyze the following text and provide corrections for grammar, spelling, punctuation, clarity, and tone.
+
+    **Writing Preferences:**
+    - Tone: ${toneMap[tone]}
+    - Dialect: ${dialectMap[dialect]}
+
+    Return a JSON object with the following structure:
+    {
+        "correctedText": "The fully corrected text",
+        "changes": [
+            {
+                "type": "grammar" | "spelling" | "punctuation" | "clarity" | "tone",
+                "original": "The original text segment",
+                "replacement": "The replacement text",
+                "explanation": "Why this change was made"
+            }
+        ]
+    }
 
     Text: "${text}"
   `;
@@ -231,6 +270,7 @@ async function callGemini(provider, text) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { response_mime_type: "application/json" },
         }),
     });
 
@@ -244,20 +284,57 @@ async function callGemini(provider, text) {
     }
 
     const data = await response.json();
-    const correctedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
-    if (!correctedText) throw new Error("Gemini returned empty response.");
+    if (!rawText) throw new Error("Gemini returned empty response.");
 
-    return { correctedText: correctedText.trim() };
+    try {
+        return JSON.parse(rawText);
+    } catch (e) {
+        console.error("Failed to parse Gemini JSON:", rawText);
+        // Fallback for non-JSON response
+        return { correctedText: rawText.trim(), changes: [] };
+    }
 }
 
 // OpenAI-Compatible Handler
 async function callOpenAICompatible(provider, text) {
+    const { config } = await chrome.storage.sync.get("config");
+    const tone = config?.preferences?.tone || "neutral";
+    const dialect = config?.preferences?.dialect || "us";
+
+    const toneMap = {
+        formal: "Formal and professional",
+        casual: "Casual and conversational",
+        neutral: "Neutral",
+    };
+
+    const dialectMap = {
+        us: "US English spelling and conventions",
+        uk: "UK English spelling and conventions",
+        ca: "Canadian English spelling and conventions",
+    };
+
     const prompt = `
     You are an expert grammar and style editor.
-    Fix the grammar, spelling, and punctuation of the following text.
-    Improve clarity and flow, but keep the original tone.
-    Return ONLY the corrected text. Do not add quotes or preambles.
+    Analyze the following text and provide corrections for grammar, spelling, punctuation, clarity, and tone.
+
+    **Writing Preferences:**
+    - Tone: ${toneMap[tone]}
+    - Dialect: ${dialectMap[dialect]}
+
+    Return a JSON object with the following structure:
+    {
+        "correctedText": "The fully corrected text",
+        "changes": [
+            {
+                "type": "grammar" | "spelling" | "punctuation" | "clarity" | "tone",
+                "original": "The original text segment",
+                "replacement": "The replacement text",
+                "explanation": "Why this change was made"
+            }
+        ]
+    }
 
     Text: "${text}"
   `;
@@ -280,11 +357,13 @@ async function callOpenAICompatible(provider, text) {
             messages: [
                 {
                     role: "system",
-                    content: "You are a helpful grammar assistant.",
+                    content:
+                        "You are a helpful grammar assistant. You MUST return valid JSON.",
                 },
                 { role: "user", content: prompt },
             ],
             temperature: 0.3,
+            response_format: { type: "json_object" },
         }),
     });
 
@@ -298,12 +377,16 @@ async function callOpenAICompatible(provider, text) {
     }
 
     const data = await response.json();
-    const correctedText = data.choices?.[0]?.message?.content;
+    const rawText = data.choices?.[0]?.message?.content;
 
-    if (!correctedText)
-        throw new Error(`${provider.name} returned empty response.`);
+    if (!rawText) throw new Error(`${provider.name} returned empty response.`);
 
-    return { correctedText: correctedText.trim() };
+    try {
+        return JSON.parse(rawText);
+    } catch (e) {
+        console.error(`Failed to parse ${provider.name} JSON:`, rawText);
+        return { correctedText: rawText.trim(), changes: [] };
+    }
 }
 
 // Test Connection

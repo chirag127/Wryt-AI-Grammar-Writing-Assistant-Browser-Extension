@@ -14,6 +14,15 @@ async function loadSettings() {
     const { config } = await chrome.storage.sync.get("config");
     if (!config) return;
 
+    // Load preferences
+    const toneSelect = document.getElementById("tone-select");
+    const dialectSelect = document.getElementById("dialect-select");
+
+    if (config.preferences) {
+        toneSelect.value = config.preferences.tone || "neutral";
+        dialectSelect.value = config.preferences.dialect || "us";
+    }
+
     renderProviders(config.providers);
 }
 
@@ -157,6 +166,17 @@ function addEventListeners() {
     document.querySelectorAll(".enable-check").forEach((check) => {
         check.addEventListener("change", saveSettings);
     });
+
+    // Preferences Event Listeners
+    const toneSelect = document.getElementById("tone-select");
+    const dialectSelect = document.getElementById("dialect-select");
+
+    if (toneSelect) {
+        toneSelect.addEventListener("change", saveSettings);
+    }
+    if (dialectSelect) {
+        dialectSelect.addEventListener("change", saveSettings);
+    }
 }
 
 function debounce(func, wait) {
@@ -192,6 +212,15 @@ async function saveSettings() {
         });
     });
 
+    // Get preferences
+    const toneSelect = document.getElementById("tone-select");
+    const dialectSelect = document.getElementById("dialect-select");
+
+    const preferences = {
+        tone: toneSelect?.value || "neutral",
+        dialect: dialectSelect?.value || "us",
+    };
+
     // Merge with existing config
     const { config } = await chrome.storage.sync.get("config");
     const mergedProviders = config.providers.map((p) => {
@@ -199,7 +228,12 @@ async function saveSettings() {
         return newP ? { ...p, ...newP } : p;
     });
 
-    await chrome.storage.sync.set({ config: { providers: mergedProviders } });
+    await chrome.storage.sync.set({
+        config: {
+            providers: mergedProviders,
+            preferences: preferences,
+        },
+    });
 
     const originalText = saveBtn.innerText;
     saveBtn.innerText = "Saved!";

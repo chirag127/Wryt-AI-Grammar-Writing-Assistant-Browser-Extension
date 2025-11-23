@@ -185,6 +185,75 @@
             AI Writing & Grammar Checker. Configure your providers below.
         </p>
 
+        <div class="card">
+            <h2
+                style="
+                    margin-top: 0;
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    margin-bottom: 1rem;
+                "
+            >
+                Writing Preferences
+            </h2>
+            <div style="display: flex; gap: 2rem; flex-wrap: wrap">
+                <div style="flex: 1; min-width: 200px">
+                    <label
+                        style="
+                            display: block;
+                            margin-bottom: 0.5rem;
+                            color: var(--text-muted);
+                            font-size: 0.875rem;
+                            font-weight: 600;
+                        "
+                        >Tone</label
+                    >
+                    <select
+                        id="tone-select"
+                        style="
+                            width: 100%;
+                            padding: 0.75rem;
+                            border-radius: 6px;
+                            background: var(--bg);
+                            color: var(--text);
+                            border: 1px solid var(--border);
+                        "
+                    >
+                        <option value="neutral">Neutral</option>
+                        <option value="formal">Formal</option>
+                        <option value="casual">Casual</option>
+                    </select>
+                </div>
+                <div style="flex: 1; min-width: 200px">
+                    <label
+                        style="
+                            display: block;
+                            margin-bottom: 0.5rem;
+                            color: var(--text-muted);
+                            font-size: 0.875rem;
+                            font-weight: 600;
+                        "
+                        >Dialect</label
+                    >
+                    <select
+                        id="dialect-select"
+                        style="
+                            width: 100%;
+                            padding: 0.75rem;
+                            border-radius: 6px;
+                            background: var(--bg);
+                            color: var(--text);
+                            border: 1px solid var(--border);
+                        "
+                    >
+                        <option value="us">US English</option>
+                        <option value="uk">UK English</option>
+                        <option value="ca">Canadian English</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <div id="provider-container">
             <!-- Providers will be injected here by JS -->
         </div>
