@@ -51,6 +51,92 @@ sidebar.innerHTML = `
 `;
 shadow.appendChild(sidebar);
 
+// Draggable Functionality
+let isDragging = false;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+// Restore saved position or set default
+async function restoreSidebarPosition() {
+    const result = await chrome.storage.local.get("sidebarPosition");
+    if (result.sidebarPosition) {
+        sidebar.style.left = `${result.sidebarPosition.x}px`;
+        sidebar.style.top = `${result.sidebarPosition.y}px`;
+        sidebar.style.right = "auto";
+    } else {
+        // Default position: right side, vertically centered
+        sidebar.style.right = "20px";
+        sidebar.style.top = "50%";
+        sidebar.style.transform = "translateY(-50%)";
+    }
+}
+
+restoreSidebarPosition();
+
+// Make sidebar draggable
+const header = sidebar.querySelector(".wryt-header");
+header.style.cursor = "grab";
+
+header.addEventListener("mousedown", (e) => {
+    // Don't start drag if clicking on buttons
+    if (
+        e.target.classList.contains("wryt-close-btn") ||
+        e.target.closest(".wryt-close-btn")
+    ) {
+        return;
+    }
+
+    isDragging = true;
+    header.style.cursor = "grabbing";
+    sidebar.classList.add("wryt-dragging");
+
+    // Calculate offset from mouse to top-left of sidebar
+    const rect = sidebar.getBoundingClientRect();
+    dragOffsetX = e.clientX - rect.left;
+    dragOffsetY = e.clientY - rect.top;
+
+    e.preventDefault();
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+
+    // Calculate new position
+    let newX = e.clientX - dragOffsetX;
+    let newY = e.clientY - dragOffsetY;
+
+    // Constrain to viewport bounds
+    const sidebarRect = sidebar.getBoundingClientRect();
+    const maxX = window.innerWidth - sidebarRect.width;
+    const maxY = window.innerHeight - sidebarRect.height;
+
+    newX = Math.max(0, Math.min(newX, maxX));
+    newY = Math.max(0, Math.min(newY, maxY));
+
+    // Apply position
+    sidebar.style.left = `${newX}px`;
+    sidebar.style.top = `${newY}px`;
+    sidebar.style.right = "auto";
+    sidebar.style.transform = "none";
+});
+
+document.addEventListener("mouseup", () => {
+    if (isDragging) {
+        isDragging = false;
+        header.style.cursor = "grab";
+        sidebar.classList.remove("wryt-dragging");
+
+        // Save position
+        const rect = sidebar.getBoundingClientRect();
+        chrome.storage.local.set({
+            sidebarPosition: {
+                x: rect.left,
+                y: rect.top,
+            },
+        });
+    }
+});
+
 // Event Listeners
 document.addEventListener("input", handleInput, true);
 sidebar

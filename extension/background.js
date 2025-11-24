@@ -171,6 +171,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             .catch((error) => sendResponse({ error: error.message }));
         return true;
     }
+    if (request.action === "enhancePrompt") {
+        handlePromptEnhancement(request.prompt, request.url)
+            .then((response) => sendResponse(response))
+            .catch((error) => sendResponse({ error: error.message }));
+        return true;
+    }
     if (request.action === "testConnection") {
         testProviderConnection(
             request.providerId,
@@ -255,6 +261,46 @@ async function handleTextGeneration(promptText, contextText) {
                 promptText,
                 "generate",
                 contextText
+            );
+            return {
+                ...result,
+                provider: provider.name,
+            };
+        } catch (error) {
+            lastError = error;
+        }
+    }
+    throw new Error(
+        `All providers failed. Last error: ${
+            lastError?.message || "Unknown error"
+        }`
+    );
+}
+
+async function handlePromptEnhancement(userPrompt, currentUrl) {
+    const { config } = await chrome.storage.sync.get("config");
+    if (!config || !config.providers)
+        throw new Error("Configuration not loaded.");
+
+    const activeProviders = config.providers
+        .filter((p) => p.enabled && p.apiKey)
+        .sort((a, b) => a.priority - b.priority);
+
+    if (activeProviders.length === 0) {
+        return {
+            error: "No active providers configured.",
+        };
+    }
+
+    let lastError = null;
+
+    for (const provider of activeProviders) {
+        try {
+            const result = await callProviderApi(
+                provider,
+                userPrompt,
+                "enhancePrompt",
+                currentUrl
             );
             return {
                 ...result,
@@ -471,6 +517,66 @@ ${brandVoiceSection}
 
 **OUTPUT:**
 Return ONLY the generated text. Do not include "Here is the text" or quotes around the output. Just the raw text ready to be inserted.`;
+}
+
+function buildPromptEnhancementTemplate(userPrompt, currentUrl) {
+    // Extract domain from URL for context
+    let siteName = "an AI assistant";
+    try {
+        const url = new URL(currentUrl);
+        const hostname = url.hostname;
+        if (hostname.includes("openai.com") || hostname.includes("chatgpt.com"))
+            siteName = "ChatGPT";
+        else if (hostname.includes("claude.ai")) siteName = "Claude";
+        else if (hostname.includes("gemini.google.com"))
+            siteName = "Google Gemini";
+        else if (hostname.includes("copilot.microsoft.com"))
+            siteName = "Microsoft Copilot";
+    } catch (e) {
+        // Fallback if URL parsing fails
+    }
+
+    return `# AI Prompt Enhancer
+
+**About This Tool:**
+AI Prompt Enhancer is your go-to tool for elevating the quality and effectiveness of your AI prompts. Through an interactive, step-by-step process, it analyzes your initial prompt, provides constructive feedback, and guides you towards creating more powerful, precise, and productive interactions with language models. Whether you're a professional prompt engineer or a casual AI user, this tool helps you unlock the full potential of your AI conversations.
+
+---
+
+## Your Task
+
+The user is currently on **${siteName}** (URL: ${currentUrl}) and wants to improve the following vague or unclear prompt:
+
+**Original Prompt:**
+"${userPrompt}"
+
+## Instructions
+
+Please enhance this prompt by:
+
+1. **Analyzing the Intent:** Identify what the user truly wants to achieve
+2. **Adding Context:** Include relevant background information that would help the AI understand better
+3. **Structuring the Request:** Organize the prompt into clear sections (if needed)
+4. **Specifying Constraints:** Define format, length, tone, or style requirements
+5. **Clarifying Output:** Be explicit about what the final output should look like
+
+## Enhanced Prompt Format
+
+Return a well-structured, professional prompt that:
+- Uses clear, specific language
+- Includes necessary context about the task
+- Specifies the desired output format
+- Sets appropriate expectations
+- Leverages best practices in prompt engineering
+
+**Output Guidelines:**
+- Return ONLY the enhanced prompt
+- Do NOT include meta-commentary like "Here is the enhanced prompt:"
+- Make it ready to copy-paste directly into ${siteName}
+- Ensure it's at least 2-3 times more detailed than the original
+- Use professional yet accessible language
+
+Generate the enhanced prompt now:`;
 }
 
 // Gemini Handler

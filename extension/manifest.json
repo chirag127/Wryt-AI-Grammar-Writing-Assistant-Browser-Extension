@@ -1,25 +1,42 @@
 {
     "manifest_version": 3,
     "name": "Wryt - AI Grammar & Spell Checker",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "A free, resilient AI Grammar and Spell Checker using a waterfall of LLM APIs (Gemini, Llama, DeepSeek).",
-    "permissions": ["storage", "activeTab", "scripting", "contextMenus"],
+    "permissions": [
+        "storage",
+        "activeTab",
+        "scripting",
+        "contextMenus",
+        "tabs"
+    ],
     "host_permissions": [
         "https://generativelanguage.googleapis.com/*",
         "https://api.groq.com/*",
         "https://openrouter.ai/api/*",
         "https://models.inference.ai.azure.com/*",
         "https://api.cerebras.ai/*",
-        "https://api.sambanova.ai/*"
+        "https://api.sambanova.ai/*",
+        "https://chat.openai.com/*",
+        "https://chatgpt.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://copilot.microsoft.com/*"
     ],
     "background": {
         "service_worker": "background.js"
     },
     "content_scripts": [
         {
-            "matches": ["<all_urls>"],
-            "js": ["content.js"],
-            "css": ["styles.css"],
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "css": [
+                "styles.css"
+            ],
             "run_at": "document_idle"
         }
     ],
@@ -42,8 +59,13 @@
     },
     "web_accessible_resources": [
         {
-            "resources": ["styles.css", "icons/*.png"],
-            "matches": ["<all_urls>"]
+            "resources": [
+                "styles.css",
+                "icons/*.png"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
         }
     ]
 }
