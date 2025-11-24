@@ -106,8 +106,8 @@ function renderProviders(providers) {
           <input type="text" placeholder="Custom Model ID" value="${
               provider.model
           }" class="model-input ${isCustomModel ? "" : "hidden"}" style="${
-            isCustomModel ? "" : "display: none;"
-        } flex: 1;">
+              isCustomModel ? "" : "display: none;"
+          } flex: 1;">
         </div>
 
         <button class="test-btn" data-id="${provider.id}">Test</button>
@@ -188,9 +188,8 @@ function addEventListeners() {
 function debounce(func, wait) {
     let timeout;
     return function (...args) {
-        const context = this;
         clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(context, args), wait);
+        timeout = setTimeout(() => func.apply(this, args), wait);
     };
 }
 

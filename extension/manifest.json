@@ -3,12 +3,7 @@
     "name": "Wryt - AI Grammar & Spell Checker",
     "version": "1.1.0",
     "description": "A free, resilient AI Grammar and Spell Checker using a waterfall of LLM APIs (Gemini, Llama, DeepSeek).",
-    "permissions": [
-        "storage",
-        "activeTab",
-        "scripting",
-        "contextMenus"
-    ],
+    "permissions": ["storage", "activeTab", "scripting", "contextMenus"],
     "host_permissions": [
         "https://generativelanguage.googleapis.com/*",
         "https://api.groq.com/*",
@@ -22,15 +17,9 @@
     },
     "content_scripts": [
         {
-            "matches": [
-                "<all_urls>"
-            ],
-            "js": [
-                "content.js"
-            ],
-            "css": [
-                "styles.css"
-            ],
+            "matches": ["<all_urls>"],
+            "js": ["content.js"],
+            "css": ["styles.css"],
             "run_at": "document_idle"
         }
     ],
@@ -53,13 +42,8 @@
     },
     "web_accessible_resources": [
         {
-            "resources": [
-                "styles.css",
-                "icons/*.png"
-            ],
-            "matches": [
-                "<all_urls>"
-            ]
+            "resources": ["styles.css", "icons/*.png"],
+            "matches": ["<all_urls>"]
         }
     ]
 }

@@ -1,19 +1,20 @@
 {
     "name": "wryt-extension",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "description": "Wryt Extension Assets",
     "scripts": {
-        "generate-icons": "ts-node scripts/generate-icons.ts"
+        "generate-icons": "ts-node scripts/generate-icons.ts",
+        "lint": "biome check .",
+        "lint:fix": "biome check --write .",
+        "format": "biome format --write ."
     },
     "dependencies": {
         "sharp": "^0.33.2"
     },
     "devDependencies": {
+        "@biomejs/biome": "^1.9.4",
         "@types/node": "^20.11.19",
         "@types/sharp": "^0.31.1",
-        "eslint": "^9.39.1",
-        "eslint-config-prettier": "^10.1.8",
-        "prettier": "^3.6.2",
         "ts-node": "^10.9.2",
         "typescript": "^5.3.3"
     }

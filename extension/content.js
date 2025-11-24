@@ -73,7 +73,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 let currentTarget = null;
-let currentSuggestion = "";
+const currentSuggestion = "";
 let currentResponse = null;
 
 function handleInput(e) {
@@ -456,7 +456,7 @@ function applySingleFix(index) {
 
     // Update badge
     const badge = shadow.querySelector(".wryt-badge-count");
-    badge.textContent = parseInt(badge.textContent) - 1;
+    badge.textContent = Number.parseInt(badge.textContent) - 1;
     if (badge.textContent === "0") badge.classList.add("hidden");
 }
 

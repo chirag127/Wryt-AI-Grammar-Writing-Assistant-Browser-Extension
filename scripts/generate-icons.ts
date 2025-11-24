@@ -1,6 +1,6 @@
-import sharp from "sharp";
 import fs from "fs";
 import path from "path";
+import sharp from "sharp";
 
 const SIZES = [16, 48, 128];
 const INPUT_FILE = path.join(__dirname, "../extension/icons/icon.svg");
