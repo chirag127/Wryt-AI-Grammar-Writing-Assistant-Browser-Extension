@@ -11,13 +11,15 @@ Our intelligent **waterfall failover system** ensures you always get the best re
 
 ### Key Highlights
 
-- 🤖 **Multi-Provider AI Support** - Uses 6 different AI providers for maximum reliability
-- 🔄 **Intelligent Waterfall Failover** - Automatic provider switching ensures uninterrupted service
-- 🎤 **Speech-to-Text Expert** - Specialized in correcting phonetic errors, homophones, and dictation artifacts
-- 📊 **4-Tier Analysis System** - Critical Grammar, Clarity, Engagement, and Delivery & Tone
-- 🎨 **Brand Voice Enforcement** - Define your unique writing style and maintain consistency
-- ✨ **Originality Checks** - Flag clichés, AI-sounding phrases, and generic phrasing
-- 🆓 **Completely Free** - No subscriptions, no paywalls, open source forever
+-   🤖 **Multi-Provider AI Support** - Uses 6 different AI providers for maximum reliability
+-   🔄 **Intelligent Waterfall Failover** - Automatic provider switching ensures uninterrupted service
+-   🎤 **Speech-to-Text Expert** - Specialized in correcting phonetic errors, homophones, and dictation artifacts
+-   📊 **4-Tier Analysis System** - Critical Grammar, Clarity, Engagement, and Delivery & Tone
+-   🎨 **Brand Voice Enforcement** - Define your unique writing style and maintain consistency
+-   ✨ **Originality Checks** - Flag clichés, AI-sounding phrases, and generic phrasing
+-   🖱️ **Draggable UI** - Floating sidebar with position persistence
+-   🚀 **AI Prompt Enhancement** - Optimize your prompts for ChatGPT, Claude, and Gemini
+-   🆓 **Completely Free** - No subscriptions, no paywalls, open source forever
 
 ---
 
@@ -29,16 +31,16 @@ Visit our landing page: **[https://chirag127.github.io/Wryt-AI-Writing-and-Gramm
 
 ## 🛠️ Tech Stack / Tools Used
 
-- **JavaScript (ES6+)** - Core extension logic
-- **Chrome Extension Manifest V3** - Modern extension architecture
-- **Google Gemini API** - Advanced AI language model
-- **Groq API** - Fast inference with Llama models
-- **OpenRouter API** - Access to multiple AI models
-- **Cerebras API** - High-performance AI inference
-- **SambaNova API** - Additional AI provider option
-- **Chrome Storage API** - Persistent user preferences
-- **Content Scripts** - DOM manipulation and UI injection
-- **Context Menus API** - Right-click integration
+-   **JavaScript (ES6+)** - Core extension logic
+-   **Chrome Extension Manifest V3** - Modern extension architecture
+-   **Google Gemini API** - Advanced AI language model
+-   **Groq API** - Fast inference with Llama models
+-   **OpenRouter API** - Access to multiple AI models
+-   **Cerebras API** - High-performance AI inference
+-   **SambaNova API** - Additional AI provider option
+-   **Chrome Storage API** - Persistent user preferences
+-   **Content Scripts** - DOM manipulation and UI injection
+-   **Context Menus API** - Right-click integration
 
 ---
 
@@ -54,12 +56,15 @@ Visit our landing page: **[https://chirag127.github.io/Wryt-AI-Writing-and-Gramm
     ```
 
 2. **Open Chrome (or Chromium-based browser):**
+
     - Navigate to `chrome://extensions/`
 
 3. **Enable Developer Mode:**
+
     - Toggle the "Developer mode" switch in the top-right corner
 
 4. **Load the extension:**
+
     - Click "Load unpacked"
     - Select the `extension` folder from the cloned repository
 
@@ -95,13 +100,13 @@ Visit our landing page: **[https://chirag127.github.io/Wryt-AI-Writing-and-Gramm
 
 ### Customize Settings
 
-- Click the extension icon to access settings
-- Configure:
-    - **Tone:** Formal, Casual, or Neutral
-    - **Dialect:** US, UK, or Canadian English
-    - **Brand Voice:** Define your unique writing style
-    - **Plagiarism Check:** Enable originality detection
-    - **Provider Priority:** Reorder AI providers for custom waterfall logic
+-   Click the extension icon to access settings
+-   Configure:
+    -   **Tone:** Formal, Casual, or Neutral
+    -   **Dialect:** US, UK, or Canadian English
+    -   **Brand Voice:** Define your unique writing style
+    -   **Plagiarism Check:** Enable originality detection
+    -   **Provider Priority:** Reorder AI providers for custom waterfall logic
 
 ---
 
@@ -111,25 +116,25 @@ Visit our landing page: **[https://chirag127.github.io/Wryt-AI-Writing-and-Gramm
 
 ✅ **Multi-Provider AI Integration**
 
-- Google Gemini (2.0 Flash, Pro, Flash Lite)
-- Groq (Llama 3.3, Mixtral, Gemma2)
-- OpenRouter (Free tier models available)
-- Cerebras (Llama 3.1)
-- SambaNova (Llama 3.1, Qwen, DeepSeek)
+-   Google Gemini (2.0 Flash, Pro, Flash Lite)
+-   Groq (Llama 3.3, Mixtral, Gemma2)
+-   OpenRouter (Free tier models available)
+-   Cerebras (Llama 3.1)
+-   SambaNova (Llama 3.1, Qwen, DeepSeek)
 
 ✅ **Intelligent Waterfall Failover**
 
-- Automatic provider switching on failure
-- Configurable priority order
-- No service interruptions
+-   Automatic provider switching on failure
+-   Configurable priority order
+-   No service interruptions
 
 ✅ **Speech-to-Text Correction Specialist**
 
-- Phonetic error detection (e.g., "salary" → "still")
-- Homophone correction (their/there/they're, write/right)
-- Self-correction cleanup (e.g., "I want no I need" → "I need")
-- Repetition removal (e.g., "the the" → "the")
-- Filler word detection (um, uh, like)
+-   Phonetic error detection (e.g., "salary" → "still")
+-   Homophone correction (their/there/they're, write/right)
+-   Self-correction cleanup (e.g., "I want no I need" → "I need")
+-   Repetition removal (e.g., "the the" → "the")
+-   Filler word detection (um, uh, like)
 
 ✅ **4-Tier Analysis System**
 
@@ -140,21 +145,21 @@ Visit our landing page: **[https://chirag127.github.io/Wryt-AI-Writing-and-Gramm
 
 ✅ **Premium Features (No Cost)**
 
-- Full sentence rewrites for improved flow
-- Tone shift suggestions
-- Brand voice enforcement
-- Originality checks (clichés, AI-sounding phrases)
-- Readability scoring
-- Context-aware corrections
+-   Full sentence rewrites for improved flow
+-   Tone shift suggestions
+-   Brand voice enforcement
+-   Originality checks (clichés, AI-sounding phrases)
+-   Readability scoring
+-   Context-aware corrections
 
 ### Technical Features
 
-- **Context Menu Integration** - Right-click access
-- **Offline Configuration** - No account required
-- **Privacy-First** - No data collection, local storage only
-- **Manifest V3** - Modern, secure extension architecture
-- **JSON Schema Validation** - Structured AI responses
-- **Error Handling** - Graceful degradation on API failures
+-   **Context Menu Integration** - Right-click access
+-   **Offline Configuration** - No account required
+-   **Privacy-First** - No data collection, local storage only
+-   **Manifest V3** - Modern, secure extension architecture
+-   **JSON Schema Validation** - Structured AI responses
+-   **Error Handling** - Graceful degradation on API failures
 
 ---
 
@@ -176,10 +181,10 @@ Contributions are welcome! Here's how you can help:
 
 ### Development Guidelines
 
-- Follow existing code style (Prettier configuration included)
-- Test with multiple AI providers before submitting
-- Update documentation for new features
-- Ensure compatibility with Chrome Manifest V3
+-   Follow existing code style (Biome configuration included)
+-   Test with multiple AI providers before submitting
+-   Update documentation for new features
+-   Ensure compatibility with Chrome Manifest V3
 
 ---
 
@@ -191,36 +196,32 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 🔗 Links
 
-- **Live Demo:** [https://chirag127.github.io/Wryt-AI-Writing-and-Grammar-Checker-Browser-Extension](https://chirag127.github.io/Wryt-AI-Writing-and-Grammar-Checker-Browser-Extension)
-- **GitHub Repository:** [https://github.com/chirag127/Wryt-AI-Writing-and-Grammar-Checker-Browser-Extension](https://github.com/chirag127/Wryt-AI-Writing-and-Grammar-Checker-Browser-Extension)
-- **Privacy Policy:** [Privacy Policy](https://chirag127.github.io/Wryt-AI-Writing-and-Grammar-Checker-Browser-Extension/privacy-policy.html)
-- **Report Issues:** [GitHub Issues](https://github.com/chirag127/Wryt-AI-Writing-and-Grammar-Checker-Browser-Extension/issues)
+-   **Live Demo:** [https://chirag127.github.io/Wryt-AI-Writing-and-Grammar-Checker-Browser-Extension](https://chirag127.github.io/Wryt-AI-Writing-and-Grammar-Checker-Browser-Extension)
+-   **GitHub Repository:** [https://github.com/chirag127/Wryt-AI-Writing-and-Grammar-Checker-Browser-Extension](https://github.com/chirag127/Wryt-AI-Writing-and-Grammar-Checker-Browser-Extension)
+-   **Privacy Policy:** [Privacy Policy](https://chirag127.github.io/Wryt-AI-Writing-and-Grammar-Checker-Browser-Extension/privacy-policy.html)
+-   **Report Issues:** [GitHub Issues](https://github.com/chirag127/Wryt-AI-Writing-and-Grammar-Checker-Browser-Extension/issues)
 
 ---
 
 ## 🙏 Acknowledgments
 
-- Built with ❤️ by [Chirag Singhal](https://github.com/chirag127)
-- Powered by Google Gemini, Groq, OpenRouter, Cerebras, and SambaNova AI
-- Inspired by the need for a free, open-source Grammarly alternative
+-   Built with ❤️ by [Chirag Singhal](https://github.com/chirag127)
+-   Powered by Google Gemini, Groq, OpenRouter, Cerebras, and SambaNova AI
+-   Inspired by the need for a free, open-source Grammarly alternative
 
----
+### Version 1.1.0
 
-## 📝 Changelog
-
-### Version 1.1.0 (Current)
-
-- ✨ Multi-provider AI waterfall failover
-- 🎤 Speech-to-text correction specialization
-- 📊 4-tier analysis system
-- 🎨 Brand voice enforcement
-- ✨ Originality checks
+-   ✨ Multi-provider AI waterfall failover
+-   🎤 Speech-to-text correction specialization
+-   📊 4-tier analysis system
+-   🎨 Brand voice enforcement
+-   ✨ Originality checks
 
 ### Version 1.0.0
 
-- 🎉 Initial release
-- Basic grammar checking
-- Single AI provider support
+-   🎉 Initial release
+-   Basic grammar checking
+-   Single AI provider support
 
 ---
 

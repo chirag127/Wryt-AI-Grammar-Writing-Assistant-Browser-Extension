@@ -440,6 +440,9 @@ ${brandVoiceSection}
 - Confidence issues
 ${plagiarismSection}
 
+### 5. PROMPT_OPTIMIZATION (Gold - Severity: Bonus)
+- If the input text appears to be a prompt for an AI (e.g., starts with "Write a...", "Create...", "Act as...", or contains instructions), provide an optimized, detailed version of it using prompt engineering best practices (e.g., adding context, specifying format, defining persona).
+
 ## Step 4: Advanced Features Application
 
 Apply these mandatory enhancements:
@@ -448,6 +451,7 @@ Apply these mandatory enhancements:
 - Suggest tone shifts when detected tone mismatches target
 - Rewrite complete sentences to improve flow while preserving meaning
 - Add missing punctuation typical of dictated text (run-on sentences)
+- If the text is a prompt, generate an optimized version in the "enhanced_prompt" field.
 
 # Output Schema (STRICT JSON ONLY)
 
@@ -474,6 +478,10 @@ Return ONLY valid JSON conforming to this exact schema:
     }
   ],
   "rewrite_suggestion": "string or null - Full paragraph rewrite if needed for better flow",
+  "enhanced_prompt": {
+    "text": "string or null - The optimized prompt if applicable",
+    "explanation": "string or null - Why this is better"
+  },
   "tone_adjustments": [
     {
       "issue": "string - Identified tone problem",
@@ -594,6 +602,8 @@ async function callGemini(provider, text, mode, context) {
     let prompt;
     if (mode === "generate") {
         prompt = buildGenerationPrompt(text, context, tone, brandVoice);
+    } else if (mode === "enhancePrompt") {
+        prompt = buildPromptEnhancementTemplate(text, context);
     } else {
         prompt = buildAnalysisPrompt(
             text,
@@ -630,7 +640,7 @@ async function callGemini(provider, text, mode, context) {
 
     if (!rawText) throw new Error("Gemini returned empty response.");
 
-    if (mode === "generate") {
+    if (mode === "generate" || mode === "enhancePrompt") {
         return { generatedText: rawText.trim() };
     }
 
@@ -654,6 +664,8 @@ async function callOpenAICompatible(provider, text, mode, context) {
     let prompt;
     if (mode === "generate") {
         prompt = buildGenerationPrompt(text, context, tone, brandVoice);
+    } else if (mode === "enhancePrompt") {
+        prompt = buildPromptEnhancementTemplate(text, context);
     } else {
         prompt = buildAnalysisPrompt(
             text,
@@ -713,7 +725,7 @@ async function callOpenAICompatible(provider, text, mode, context) {
 
     if (!rawText) throw new Error(`${provider.name} returned empty response.`);
 
-    if (mode === "generate") {
+    if (mode === "generate" || mode === "enhancePrompt") {
         return { generatedText: rawText.trim() };
     }
 

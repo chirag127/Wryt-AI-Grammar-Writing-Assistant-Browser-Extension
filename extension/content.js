@@ -317,6 +317,12 @@ function renderSuggestions(data) {
     container.innerHTML = "";
     shadow.querySelector(".wryt-empty-state").style.display = "none";
 
+    // Render Enhanced Prompt if available
+    if (data.enhanced_prompt && data.enhanced_prompt.text) {
+        const promptCard = createEnhancedPromptCard(data.enhanced_prompt);
+        container.appendChild(promptCard);
+    }
+
     // Handle legacy/simple response format
     if (!data.corrections && data.changes) {
         data.corrections = data.changes.map((c) => ({
@@ -585,4 +591,44 @@ function renderSimpleSuggestion(correctedText) {
     container.appendChild(card);
     shadow.querySelector(".wryt-footer").classList.add("hidden");
     updateBadgeCount();
+}
+
+function createEnhancedPromptCard(enhancedPrompt) {
+    const card = document.createElement("div");
+    card.className = "wryt-card wryt-gold";
+
+    card.innerHTML = `
+        <div class="wryt-card-header">
+            <span class="wryt-badge wryt-badge-gold">
+                ✨ Prompt Optimization
+            </span>
+            <span class="wryt-severity">Bonus</span>
+        </div>
+        <div class="wryt-diff">
+            <div class="wryt-replacement" style="white-space: pre-wrap;">${
+                enhancedPrompt.text
+            }</div>
+        </div>
+        <div class="wryt-explanation">${
+            enhancedPrompt.explanation || "Optimized for better AI results."
+        }</div>
+        <div class="wryt-card-actions">
+            <button class="wryt-icon-btn accept" title="Copy to clipboard">📋</button>
+            <button class="wryt-icon-btn reject">×</button>
+        </div>
+    `;
+
+    card.querySelector(".accept").addEventListener("click", () => {
+        navigator.clipboard.writeText(enhancedPrompt.text);
+        const btn = card.querySelector(".accept");
+        btn.textContent = "✓";
+        setTimeout(() => (btn.textContent = "📋"), 2000);
+    });
+
+    card.querySelector(".reject").addEventListener("click", () => {
+        card.remove();
+        updateBadgeCount();
+    });
+
+    return card;
 }
