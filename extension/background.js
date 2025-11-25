@@ -487,7 +487,7 @@ Return ONLY valid JSON conforming to this exact schema:
       "type": "enum: CRITICAL_GRAMMAR|CLARITY|ENGAGEMENT|DELIVERY_TONE|ORIGINALITY",
       "severity": "enum: Critical|Advanced",
       "original": "string - exact text segment from input",
-      "replacement": "string - corrected version",
+      "replacement": "string - corrected version (use empty string for deletion)",
       "explanation": "string - concise reason (max 15 words)",
       "start_offset": "integer - character position where error starts",
       "end_offset": "integer - character position where error ends",

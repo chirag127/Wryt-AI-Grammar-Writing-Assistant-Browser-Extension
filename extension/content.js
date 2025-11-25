@@ -399,7 +399,7 @@ function createCorrectionCard(correction, index) {
             }</span>
             <span class="wryt-arrow">→</span>
             <span class="wryt-replacement">${
-                correction.replacement || correction.suggestion
+                correction.replacement || correction.suggestion || ""
             }</span>
         </div>
         <div class="wryt-explanation">${correction.explanation}</div>
