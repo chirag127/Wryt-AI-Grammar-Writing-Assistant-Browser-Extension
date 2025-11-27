@@ -9,7 +9,7 @@
         "format": "biome format --write ."
     },
     "dependencies": {
-        "sharp": "^0.33.2"
+        "sharp": "^0.34.4"
     },
     "devDependencies": {
         "@biomejs/biome": "^1.9.4",
