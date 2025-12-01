@@ -1,81 +1,60 @@
-# 🚀 Pull Request Template: Wryt-AI Integration & Feature Advancement
-
-**Project Mandate:** Enforce Zero-Defect, High-Velocity, Future-Proof code adhering to the Apex Technical Authority standards.
-
 --- 
+name: Feature / Fix / Refactoring Proposal
+about: Standardized template for submitting code changes to the Wryt-AI repository.
+title: 'type(scope): concise description (e.g., feat(api): Add LLM cascade selector)'
+labels: ['needs-review', 'status:draft']
+assignees: ''
+---
 
-## 1. PR Summary & Value Proposition (BLUF)
+## 🎯 PR Type & Description
 
-*Provide a concise, single-sentence description of what this PR achieves and its primary user/architectural benefit.*
+**What kind of change does this PR introduce?** (Check one or more)
+- [ ] `feat`: A new feature (non-breaking change).
+- [ ] `fix`: A bug fix (non-breaking change).
+- [ ] `perf`: A code change that improves performance.
+- [ ] `refactor`: A code change that neither fixes a bug nor adds a feature (clean up/restructuring).
+- [ ] `test`: Adding missing tests or correcting existing tests.
+- [ ] `docs`: Documentation only changes.
+- [ ] `chore`: Build process or auxiliary tool changes.
 
-**Example:** `feat: Implements native Tauri storage for persistent LLM API keys, enhancing security and user experience.`
+**Relevant Issue(s):**
+Closes # (If applicable, link the issue this PR resolves)
 
 ---
 
-## 2. Type of Change
+## 🤖 Architect's Validation Checklist (The Zero-Defect Mandate)
 
-Select all that apply:
+*The following checks ensure compliance with the Apex Technical Authority standards (Referenced in AGENTS.md).* 
 
-- [ ] `feat`: A new feature or capability (e.g., new LLM integration, UI enhancement).
-- [ ] `fix`: A bug fix (e.g., correcting state mutation, addressing a logic error).
-- [ ] `refactor`: Code change that neither fixes a bug nor adds a feature (e.g., architectural cleanup, optimizing a loop).
-- [ ] `docs`: Changes to documentation only (README, CONTRIBUTING, etc.).
-- [ ] `test`: Adding missing tests or improving existing test coverage.
-- [ ] `chore`: Maintenance tasks (e.g., updating dependencies, CI/CD tweaks).
-- [ ] `perf`: Performance improvements.
-- [ ] `security`: Security vulnerability patching or hardening.
+### 1. Code Hygiene & Architecture
+- [ ] **Conventional Commits:** The PR title and all commits adhere to the `type(scope): description` format.
+- [ ] **Self-Documenting Code:** Variables and functions use semantic, descriptive names (`camelCase`/`PascalCase`). Zero unnecessary comments.
+- [ ] **SOLID Principle Adherence:** Changes respect Single Responsibility and Open/Closed Principles.
+- [ ] **DRY Enforcement:** Repetitive code has been abstracted or automated.
+- [ ] **Guard Clauses:** Logic is optimized for reading down (early returns implemented).
+- [ ] **Modularity:** New components/features are placed within the designated feature-first structure (e.g., `src/features/llm-cascader`).
 
----
+### 2. Testing & Coverage
+- [ ] **Tests Added/Updated:** Unit tests (Vitest) cover new logic or fix regressions.
+- [ ] **High Coverage:** Code coverage remains at or above the threshold defined in the CI pipeline.
+- [ ] **Isolation:** Tests are isolated (using mocks for API calls or external dependencies).
+- [ ] **F.I.R.S.T:** Tests are Fast, Isolated, Repeatable, Self-validating, and Timely.
 
-## 3. Architectural Context & Scope
+### 3. Performance & Security
+- [ ] **Performance Audit:** No new large dependencies were introduced. Optimized for speed (INP < 200ms).
+- [ ] **Security Review (Zero Trust):** All user inputs (especially LLM prompts/results) are sanitized and validated against OWASP Top 10 standards.
+- [ ] **Error Handling:** Critical I/O operations (API calls, browser storage) are wrapped in `try-catch` blocks with recovery/retry logic.
 
-### A. Core Principles Adherence Check (Self-Audit)
-
-*Review against Apex Principles. Mark as N/A or CONFIRMED.*
-
-- [ ] **SOLID Adherence:** Is the Single Responsibility Principle respected in modified modules? (Y/N)
-- [ ] **CQS Applied:** Do all new methods cleanly separate Commands from Queries? (Y/N)
-- [ ] **Guard Clauses Used:** Are deeply nested structures avoided in favor of early returns? (Y/N)
-- [ ] **Testing Coverage:** Are all new/modified logic paths covered by Unit/E2E tests? (Y/N)
-- [ ] **Input Sanitization:** Are all external inputs (API keys, text input) rigorously sanitized? (Y/N)
-
-### B. Affected Files & Feature Slices
-
-*List the main directories or modules impacted.*
-
-- `src/features/[feature-name]/...`
-- `src/lib/llm-adapters/...`
-- `src/browser-inject/...`
+### 4. Documentation & Deployment
+- [ ] **README/Docs Updated:** Relevant changes to setup, configuration, or functionality have been reflected in `README.md` or other docs.
+- [ ] **Configuration:** If new environment variables are needed, they are documented and handled according to the 12-Factor App methodology.
 
 ---
 
-## 4. Technical Deep Dive & Verification
+## 🚀 Reviewer Notes
 
-*Explain the **WHY** and **HOW** of the major changes. Reference relevant issues if applicable.*
+*Provide specific guidance for the reviewer on areas that require focused attention.*
 
-**Reasoning:**
-
-<!-- Detailed explanation here -->
-
-**Verification Steps (Required for Merge):**
-
-1.  Build the extension using `npm run build:extension`.
-2.  Run full integration suite: `npm run test:e2e`.
-3.  Manually verify the specific feature change on a target website (e.g., Gmail, Notion).
-4.  Confirm browser console logs show **ZERO** errors post-interaction.
-
----
-
-## 5. Agent Directives Compliance
-
-*Confirm that this PR aligns with the current project's documented technical strategy.*
-
-- [ ] **Stack Alignment:** Does this change conform to the documented TypeScript 6.x / Vite 7 / WXT stack? (Y/N)
-- [ ] **Security Posture:** Does this introduce any new dependencies or change encryption/storage methods that need security review? (Y/N)
-
----
-
-## 6. Related Issues
-
-Closes: #XXX (If applicable)
-Fixes: #YYY (If applicable)
+1.  **AI Logic Path:** Please pay close attention to the multi-LLM cascading logic. Verify the Circuit Breaker and Fallback Cascade mechanisms defined in `AGENTS.md` are correctly implemented.
+2.  **Browser Context:** Confirm proper communication between Content Scripts and Background Service Workers using the standard message passing protocol, ensuring minimal latency.
+3.  **UI/UX:** Check if the interaction flow adheres to the high standard of UX (Liquid Glass/Neo-Brutalist design) and hyper-configurability.
