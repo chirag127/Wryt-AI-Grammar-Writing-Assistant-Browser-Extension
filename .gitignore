@@ -1,36 +1,24 @@
-# Node modules
+# Node.js
 node_modules/
 
 # Build artifacts
 dist/
-build/
-.cache/
+bundle/
+.parcel-cache/
 
-# IDE and editor files
-.DS_Store
-*.swp
-*.swo
-*.bak
+# IDE / Editor
 .idea/
 .vscode/
+*.iml
+.DS_Store
 
-# System files
+# System Files
 .env
 .env.local
 
 # Logs
 *.log
+*.tmp
 
-# Package lock files
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
-# Tauri specific
-tauri.conf.json
-
-# Biome cache
-.biome/
-
-# Coverage files
-coverage/
+# Tauri
+/src-tauri/target/
