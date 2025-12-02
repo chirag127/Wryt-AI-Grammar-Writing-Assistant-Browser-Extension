@@ -1,60 +1,71 @@
---- 
-name: Feature / Fix / Refactoring Proposal
-about: Standardized template for submitting code changes to the Wryt-AI repository.
-title: 'type(scope): concise description (e.g., feat(api): Add LLM cascade selector)'
-labels: ['needs-review', 'status:draft']
-assignees: ''
----
+# Pull Request Template
 
-## 🎯 PR Type & Description
+**Thank you for contributing to `Wryt-AI-Grammar-Writing-Assistant-Browser-Extension`!**
 
-**What kind of change does this PR introduce?** (Check one or more)
-- [ ] `feat`: A new feature (non-breaking change).
-- [ ] `fix`: A bug fix (non-breaking change).
-- [ ] `perf`: A code change that improves performance.
-- [ ] `refactor`: A code change that neither fixes a bug nor adds a feature (clean up/restructuring).
-- [ ] `test`: Adding missing tests or correcting existing tests.
-- [ ] `docs`: Documentation only changes.
-- [ ] `chore`: Build process or auxiliary tool changes.
-
-**Relevant Issue(s):**
-Closes # (If applicable, link the issue this PR resolves)
+Please review the following sections to ensure your pull request meets our standards.
 
 ---
 
-## 🤖 Architect's Validation Checklist (The Zero-Defect Mandate)
+## 1. Pull Request Checklist
 
-*The following checks ensure compliance with the Apex Technical Authority standards (Referenced in AGENTS.md).* 
+Before submitting, please ensure you have:
 
-### 1. Code Hygiene & Architecture
-- [ ] **Conventional Commits:** The PR title and all commits adhere to the `type(scope): description` format.
-- [ ] **Self-Documenting Code:** Variables and functions use semantic, descriptive names (`camelCase`/`PascalCase`). Zero unnecessary comments.
-- [ ] **SOLID Principle Adherence:** Changes respect Single Responsibility and Open/Closed Principles.
-- [ ] **DRY Enforcement:** Repetitive code has been abstracted or automated.
-- [ ] **Guard Clauses:** Logic is optimized for reading down (early returns implemented).
-- [ ] **Modularity:** New components/features are placed within the designated feature-first structure (e.g., `src/features/llm-cascader`).
-
-### 2. Testing & Coverage
-- [ ] **Tests Added/Updated:** Unit tests (Vitest) cover new logic or fix regressions.
-- [ ] **High Coverage:** Code coverage remains at or above the threshold defined in the CI pipeline.
-- [ ] **Isolation:** Tests are isolated (using mocks for API calls or external dependencies).
-- [ ] **F.I.R.S.T:** Tests are Fast, Isolated, Repeatable, Self-validating, and Timely.
-
-### 3. Performance & Security
-- [ ] **Performance Audit:** No new large dependencies were introduced. Optimized for speed (INP < 200ms).
-- [ ] **Security Review (Zero Trust):** All user inputs (especially LLM prompts/results) are sanitized and validated against OWASP Top 10 standards.
-- [ ] **Error Handling:** Critical I/O operations (API calls, browser storage) are wrapped in `try-catch` blocks with recovery/retry logic.
-
-### 4. Documentation & Deployment
-- [ ] **README/Docs Updated:** Relevant changes to setup, configuration, or functionality have been reflected in `README.md` or other docs.
-- [ ] **Configuration:** If new environment variables are needed, they are documented and handled according to the 12-Factor App methodology.
+*   [ ] Read and understood the contributing guidelines in `.github/CONTRIBUTING.md`.
+*   [ ] Checked that your changes address an existing issue or a well-defined feature.
+*   [ ] Tested your changes thoroughly.
+*   [ ] Updated relevant documentation (if applicable).
+*   [ ] Ensured your code adheres to the project's coding standards (linting and formatting).
+*   [ ] Squashed your commits into a single, logical unit (unless otherwise specified).
+*   [ ] Used a descriptive and concise commit message that follows conventional commit standards.
+*   [ ] Verified that all CI/CD checks are passing.
 
 ---
 
-## 🚀 Reviewer Notes
+## 2. Description of Changes
 
-*Provide specific guidance for the reviewer on areas that require focused attention.*
+Please provide a clear and concise summary of the changes in this pull request.
 
-1.  **AI Logic Path:** Please pay close attention to the multi-LLM cascading logic. Verify the Circuit Breaker and Fallback Cascade mechanisms defined in `AGENTS.md` are correctly implemented.
-2.  **Browser Context:** Confirm proper communication between Content Scripts and Background Service Workers using the standard message passing protocol, ensuring minimal latency.
-3.  **UI/UX:** Check if the interaction flow adheres to the high standard of UX (Liquid Glass/Neo-Brutalist design) and hyper-configurability.
+*   **What:** (e.g., Fix bug, Add feature, Refactor code, Update documentation)
+*   **Why:** (e.g., To resolve issue #XYZ, To improve performance, To enhance user experience)
+*   **How:** (Briefly describe the implementation approach)
+
+---
+
+## 3. Related Issues
+
+If this pull request closes, fixes, or is related to any issues, please link them here.
+
+*   Example: `Closes #123`
+*   Example: `Fixes #456`
+
+---
+
+## 4. Screenshots/Recordings (If Applicable)
+
+For UI-related changes, please include screenshots or recordings demonstrating the impact of your changes.
+
+---
+
+## 5. AI Agent Directives & Architecture Alignment
+
+This section ensures your contributions align with the project's architectural principles and AI integration strategies as defined in `AGENTS.md`.
+
+*   **Core Principles:** Your changes should uphold principles such as SOLID, DRY, and YAGNI. Maintain modularity and clear separation of concerns.
+*   **AI Integration:** If your changes involve the AI waterfall (Gemini, Groq, OpenRouter) or speech-to-text optimization, ensure:
+    *   Robust error handling for API calls.
+    *   Efficient data flow and minimal latency.
+    *   Clear API contracts between components.
+*   **Testing:** All new or modified functionality must have corresponding unit or integration tests.
+*   **Linting & Formatting:** Code must pass `Ruff` checks. Run `uv ruff format .` and `uv ruff check . --fix` before committing.
+
+---
+
+## 6. Developer Notes
+
+Add any additional notes that might be helpful for reviewers, such as specific areas to focus on, potential trade-offs, or future considerations.
+
+---
+
+**Repository:** `https://github.com/chirag127/Wryt-AI-Grammar-Writing-Assistant-Browser-Extension`
+**Username:** `chirag127`
+**Branch:** `main` (or specific feature branch)
