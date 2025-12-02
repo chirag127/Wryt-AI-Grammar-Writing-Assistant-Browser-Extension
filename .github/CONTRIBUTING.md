@@ -1,110 +1,99 @@
-# CONTRIBUTING TO WRYT-AI GRAMMAR & WRITING ASSISTANT
+# Contributing to Wryt-AI-Grammar-Writing-Assistant-Browser-Extension
 
-Thank you for considering contributing to Wryt-AI! Your efforts help us build a superior AI writing assistant for everyone. We adhere to rigorous standards to maintain a high-velocity, zero-defect, and future-proof codebase.
+Thank you for your interest in contributing to the Wryt-AI-Grammar-Writing-Assistant-Browser-Extension project! We value your input and aim to foster a collaborative, high-velocity, and zero-defect development environment.
 
-## 1. CODE OF CONDUCT
+This project is managed under the **Apex Technical Authority** standards, emphasizing professional archival, clear architectural patterns, and rapid iteration.
 
-This project follows the Contributor Covenant, version 2.0. Please review the full [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details on expected behavior.
+## 1. Code of Conduct
 
-## 2. OUR DEVELOPMENT PHILOSOPHY
+All contributors are expected to adhere to the [CODE_OF_CONDUCT.md](https://github.com/chirag127/Wryt-AI-Grammar-Writing-Assistant-Browser-Extension/blob/main/CODE_OF_CONDUCT.md) (Please ensure this file exists in the repository. If not, it should be created).
 
-*   **Zero-Defect, High-Velocity, Future-Proof:** Every contribution must uphold these principles. We strive for immaculately clean code, rapid iteration, and adaptability to future standards.
-*   **Apex Technical Authority:** We operate with the highest architectural and engineering standards. Familiarize yourself with the [AGENTS.md](AGENTS.md) for core principles.
-*   **Self-Documenting Code:** Aim for code that is so clear, it requires minimal comments. Comments should explain *why*, not *what*.
-*   **Test-Driven Development (TDD):** All new features and bug fixes must be accompanied by comprehensive tests.
-*   **Modularity & Clean Architecture:** Contributions should align with modular design principles, promoting separation of concerns.
+## 2. Getting Started
 
-## 3. GETTING STARTED
+To contribute, please follow these steps:
 
-### 3.1. Prerequisites
+1.  **Fork the Repository:** Create your own fork of `https://github.com/chirag127/Wryt-AI-Grammar-Writing-Assistant-Browser-Extension`.
+2.  **Clone Your Fork:** Clone your forked repository to your local machine.
+    bash
+    git clone https://github.com/chirag127/Wryt-AI-Grammar-Writing-Assistant-Browser-Extension.git
+    cd Wryt-AI-Grammar-Writing-Assistant-Browser-Extension
+    
+3.  **Setup Development Environment:**
+    *   Follow the setup instructions in the main `README.md`.
+    *   Ensure you have Node.js, npm/yarn/pnpm, and the necessary browser development tools installed.
+    *   Install dependencies:
+        bash
+        # Using npm (example, adapt if pnpm/yarn is preferred)
+        npm install
+        
+4.  **Create a Branch:** Create a new branch for your feature or bug fix. Use a descriptive name.
+    bash
+    git checkout -b feature/your-feature-name
+    # or
+    git checkout -b bugfix/issue-description
+    
 
-Ensure you have the following installed:
-
-*   **Node.js:** Latest LTS version recommended.
-*   **npm / pnpm / yarn:** Package manager of your choice (we standardize on `pnpm` for efficiency).
-*   **Git:** For version control.
-
-### 3.2. Cloning the Repository
-
-```bash
-git clone --depth 1 https://github.com/your-username/Wryt-AI-Grammar-Writing-Assistant-Browser-Extension.git
-cd Wryt-AI-Grammar-Writing-Assistant-Browser-Extension
-```
-
-### 3.3. Installation
-
-We use `pnpm` for efficient dependency management.
-
-```bash
-pnpm install
-```
-
-### 3.4. Development Setup
-
-This project utilizes **WXT (Web Extension Tooling)** for building browser extensions, Vite for development, and TypeScript.
-
-```bash
-# For development with hot-reloading (watches for changes)
-pnpm run dev
-```
-
-## 4. CONTRIBUTING WORKFLOW
+## 3. Contribution Workflow
 
 We follow a standard GitHub pull request workflow:
 
-1.  **Fork the Project:** Create your own fork of the repository.
-2.  **Create a Branch:** Branch out from `main` for your new feature or bug fix. Use descriptive names (e.g., `feat/add-brand-voice-detection`, `fix/grammar-correction-bug`).
-    ```bash
-    git checkout main
-    git pull origin main
-    git checkout -b your-feature-branch-name
-    ```
-3.  **Make Your Changes:** Implement your changes, ensuring adherence to Apex standards.
-4.  **Test Thoroughly:** Write new tests or update existing ones to cover your changes. Run the test suite.
-    ```bash
-    pnpm run test
-    ```
-5.  **Lint and Format:** Ensure your code adheres to our linting and formatting rules. This project uses **Biome**.
-    ```bash
-    pnpm run lint
-    pnpm run format
-    ```
-6.  **Commit Your Changes:** Use Conventional Commits format.
-    ```bash
+1.  **Develop Your Changes:** Make your changes in your local branch.
+2.  **Write Tests:** Ensure your changes are covered by automated tests. Refer to the testing strategy outlined in the `README.md` and `AGENTS.md`.
+3.  **Lint and Format:** Run the linter and formatter to ensure code quality and consistency.
+    bash
+    # Example commands - adapt based on the project's actual setup
+    npm run lint
+    npm run format
+    
+4.  **Commit Your Changes:** Commit your changes with clear, concise commit messages.
+    bash
     git add .
-    git commit -m "feat: Implement advanced grammar correction algorithm"
-    # Example: git commit -m "fix: Resolve issue with speech-to-text parsing"
-    ```
-7.  **Push to Your Fork:** Push your branch to your forked repository.
-    ```bash
-    git push origin your-feature-branch-name
-    ```
-8.  **Open a Pull Request:** Create a Pull Request from your feature branch to the `main` branch of the original repository.
+    git commit -m "feat: Add new feature X for writing assistant"
+    # or
+    git commit -m "fix: Resolve bug Y in LLM waterfall"
+    
+5.  **Push Your Branch:** Push your branch to your fork on GitHub.
+    bash
+    git push origin feature/your-feature-name
+    
+6.  **Open a Pull Request:** Open a Pull Request from your branch to the `main` branch of the `chirag127/Wryt-AI-Grammar-Writing-Assistant-Browser-Extension` repository.
+    *   **Title:** Provide a clear and concise title for your PR.
+    *   **Description:** Explain the changes made, the problem they solve, and any relevant context. Reference any related issues.
+    *   **Link to Issues:** If applicable, link to the issue your PR addresses (e.g., `Fixes #123`).
 
-## 5. PULL REQUEST GUIDELINES
+## 4. Code Standards & Guidelines
 
-*   **Clear Description:** Explain the *what* and *why* of your changes. Reference any related issues.
-*   **Small, Focused PRs:** Aim for pull requests that address a single concern.
-*   **CI/CD Green:** Ensure all automated checks (linting, testing, building) pass before submitting.
-*   **Code Review:** Be responsive to feedback during the code review process.
+*   **Language:** TypeScript (Strict mode is enforced).
+*   **Framework:** React.
+*   **Styling:** Tailwind CSS.
+*   **Bundler:** Vite.
+*   **Extension Framework:** WXT.
+*   **Architecture:** Feature-Sliced Design (FSD) is preferred. Follow principles of SOLID, DRY, and YAGNI.
+*   **AI Integration:** Ensure AI integrations (Gemini, Groq, OpenRouter) are robust, handle errors gracefully, and adhere to API best practices.
+*   **Testing:** All new features or significant bug fixes must include comprehensive unit and/or integration tests.
+*   **Code Reviews:** All pull requests will be reviewed by core maintainers. Be prepared to address feedback and iterate on your changes.
 
-## 6. ISSUE TRACKING
+## 5. Reporting Issues
 
-*   **Reporting Bugs:** Please use the provided [Bug Report Issue Template](.github/ISSUE_TEMPLATE/bug_report.md). Provide clear steps to reproduce, expected vs. actual behavior, and relevant environment details.
-*   **Requesting Features:** Use the [Feature Request Issue Template](.github/ISSUE_TEMPLATE/feature_request.md).
-*   **Discussions:** For general questions or ideas, please use the [GitHub Discussions](https://github.com/your-username/Wryt-AI-Grammar-Writing-Assistant-Browser-Extension/discussions) tab.
+If you find a bug or have a feature request, please open an issue on the GitHub repository.
 
-## 7. PROJECT STANDARDS & GUIDES
+*   **Bug Reports:** Provide a clear title, a detailed description of the bug, steps to reproduce it, expected behavior, and actual behavior. Include relevant environment details (browser, OS, etc.).
+*   **Feature Requests:** Describe the desired feature, explain why it would be beneficial, and provide use cases.
 
-*   **Tech Stack:** TypeScript, WXT, Vite, React (if applicable), TailwindCSS, Biome, Vitest, Playwright.
-*   **Architecture:** Feature-sliced design principles (if applicable), SOLID, DRY, KISS.
-*   **Security:** Adhere to DevSecOps principles. Sanitize all inputs, handle sensitive data securely.
-*   **AI Integration:** Follow guidelines in [AGENTS.md](AGENTS.md) for interacting with LLM providers.
+## 6. Architectural Principles (AI Agent Directives)
 
-## 8. LICENSE
+As per the `AGENTS.md` file, this project adheres to the following principles:
 
-This project is licensed under the [CC BY-NC 4.0 License](LICENSE) - see the `LICENSE` file for details. Contributions are also subject to this license.
+*   **AI Agent Alignment:** All code should be designed to be understandable and maintainable by AI agents. This includes clear naming, modular design, and comprehensive documentation.
+*   **LLM Waterfall:** Understand and contribute to the multi-LLM waterfall strategy. Ensure new integrations maintain the spirit of leveraging multiple models for optimal results.
+*   **Technical Editor Focus:** Prioritize the core functionality of elevating writing through grammar correction, brand voice enforcement, and speech-to-text optimization.
+*   **Security:** Follow the guidelines in `.github/SECURITY.md`. Prioritize security best practices, especially when handling API keys and user data.
 
---- 
+## 7. Communication
 
-We appreciate your contribution to making Wryt-AI the best writing assistant available! For any questions, please reach out on GitHub or open an issue.
+*   **Primary Channel:** GitHub Issues and Pull Requests are the primary means of communication.
+*   **Questions:** If you have questions, please ask them in the relevant issue or PR, or consider opening a discussion.
+
+By contributing, you agree to uphold these standards and help us build a powerful, reliable, and intelligent writing assistant.
+
+Thank you for contributing!
