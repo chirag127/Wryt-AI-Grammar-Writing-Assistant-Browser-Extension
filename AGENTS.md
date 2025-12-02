@@ -8,155 +8,113 @@
 
 ---
 
-## 2. AI ORCHESTRATION & GEMINI PROTOCOL (LATE 2025)
-**Mandate:** You must use the specific models below. Strictly follow this **Fallback Cascade**. Always try the smartest model first.
-* **Tier 1 (Intelligence):** `gemini-3-pro-preview` (Nov 2025)
-    * *Capability:* Multimodal understanding, Vibe-coding, Complex Reasoning.
-    * *Context:* 1M Input / 65k Output.
-* **Tier 2 (Reasoning/STEM):** `gemini-2.5-pro` (Stable)
-    * *Capability:* Advanced thinking, Codebases, Math.
-    * *Context:* 1M Input / 65k Output.
-* **Tier 3 (Balanced Speed):** `gemini-2.5-flash` (Stable)
-    * *Capability:* Large scale processing, Agentic use cases.
-    * *Context:* 1M Input / 65k Output.
-* **Tier 4 (Ultra-Fast/Cost):** `gemini-2.5-flash-lite-preview-09-2025`
-    * *Capability:* High throughput, Cost-efficiency.
-    * *Context:* 1M Input / 65k Output.
-* **Tier 5 (Legacy/Specialized):**
-    * `gemini-2.0-flash` (Workhorse fallback).
-    * `gemini-2.5-flash-native-audio-preview-09-2025` (Audio I/O).
-* **Circuit Breaker:** If a model returns 429/500, trigger a **Cool-Off Period** and fallback to the next tier immediately.
-* **Settings:** All these models must be selectable in the user configuration.
+## 2. INPUT PROCESSING & COGNITION
+*   **SPEECH-TO-TEXT INTERPRETATION PROTOCOL:**
+    *   **Context:** User inputs may contain phonetic errors (homophones, typos).
+    *   **Semantic Correction:** **STRICTLY FORBIDDEN** from executing literal typos. You must **INFER** technical intent based on the project context.
+    *   **Logic Anchor:** Treat the `README.md` as the **Single Source of Truth (SSOT)**.
+*   **MANDATORY MCP INSTRUMENTATION:**
+    *   **No Guessing:** Do not hallucinate APIs.
+    *   **Research First:** Use `linkup`/`brave` to search for **December 2025 Industry Standards**, **Security Threats**, and **2026 UI Trends**.
+    *   **Validation:** Use `docfork` to verify *every* external API signature.
+    *   **Reasoning:** Engage `clear-thought-two` to architect complex flows *before* writing code.
 
 ---
 
 ## 3. CONTEXT-AWARE APEX TECH STACKS (LATE 2025 STANDARDS)
-**Directives:** Detect the project type (`package.json`, `Cargo.toml`, `pyproject.toml`) and apply the corresponding **Apex Toolchain**.
-* **SCENARIO A: WEB / APP / EXTENSION (TypeScript)**
-    * **Stack:** **TypeScript 6.x** (Strict), **Vite 7** (Rolldown), **Tauri v2.x** (Native), **WXT** (Extensions).
-    * **State:** **Signals** (Standardized).
-    * **Lint/Test:** **Biome** (Speed) + **Vitest** (Unit) + **Playwright** (E2E).
-* **SCENARIO B: SYSTEMS / PERFORMANCE (Rust/Go)**
-    * **Stack:** **Rust 1.8x** (Cargo) or **Go 1.2x**.
-    * **Lint:** **Clippy** / **GolangCI-Lint**.
-* **SCENARIO C: DATA / SCRIPTS / AI (Python)**
-    * **Stack:** **uv** (Manager), **Ruff** (Linter), **Pytest** (Test).
+**Directives:** Detect the project type (e.g., `package.json` for frontend) and apply the corresponding **Apex Toolchain**.
+
+*   **PRIMARY SCENARIO: WEB / APP / EXTENSION (TypeScript) - *Applicable for this project***
+    *   **Stack:** This project leverages **TypeScript 6.x (Strict Mode)**. Key tools include **Vite 7 (Rolldown)** for blazing-fast builds, **WXT (Web Extension Toolkit)** for cross-browser extension development, **React 21** for the UI, and **Tailwind CSS v4** for utility-first styling. State management will utilize **Signals (Standardized)** for efficient reactivity.
+    *   **Architecture:** Adheres to **Feature-Sliced Design (FSD)** principles, ensuring a scalable and maintainable architecture for the browser extension.
+    *   **Lint/Format:** Employing **Biome v3** for comprehensive code quality checks and formatting.
+    *   **Testing:** Utilizing **Vitest** for unit and integration tests, and **Playwright** for end-to-end testing.
+
+*   **SECONDARY SCENARIO A: SYSTEMS / PERFORMANCE (Rust/Go) - *Not applicable***
+    *   **Stack:** Rust (Cargo) or Go (Modules).
+    *   **Lint:** Clippy / GolangCI-Lint.
+    *   **Architecture:** Hexagonal Architecture (Ports & Adapters).
+
+*   **TERTIARY SCENARIO B: DATA / AI / SCRIPTS (Python) - *Not applicable***
+    *   **Stack:** uv (Manager), Ruff (Linter), Pytest (Test).
+    *   **Architecture:** Modular Monolith or Microservices.
 
 ---
 
-## 4. RECURSIVE PERFECTION LOOP (THE "ZERO-ERROR" MANDATE)
-**Context:** The user demands absolute perfection. You must not stop until the codebase is pristine.
-**The Loop:**
-1.  **Analyze:** Scan the codebase.
-2.  **Fix:** Apply architectural patterns and fixes.
-3.  **Lint/Format:** Run `biome check --apply` / `ruff check --fix`.
-4.  **Test:** Run `vitest` / `pytest`.
-5.  **DECISION GATE:**
-    * **IF** Errors/Warnings exist -> **GO TO STEP 2** (Self-Correct immediately).
-    * **IF** Clean -> **COMMIT** and Present.
-**Constraint:** **DO NOT STOP** until the build is perfectly clean.
+## 4. DEVELOPMENT & VERIFICATION PROTOCOLS
+
+*   **SETUP & DEPENDENCY MANAGEMENT:**
+    *   **Repository Root:** Ensure `package.json` is the primary descriptor.
+    *   **Package Manager:** Utilize `npm` or `yarn` (or `pnpm`) as dictated by `package.json`. **Vite** will be the core build tool.
+    *   **Extension Framework:** **WXT** is the primary toolkit. Refer to its documentation for cross-browser compatibility (Chrome, Firefox) and manifest V3 requirements.
+
+*   **BUILD & RUN COMMANDS:**
+    *   **Development Server:** `npm run dev` (or equivalent Vite command via WXT).
+    *   **Production Build:** `npm run build` (or equivalent WXT command).
+    *   **Extension Loading:** Instructions will be provided in the `README.md` for loading unpacked extensions in Chrome/Firefox developer modes.
+
+*   **LINTING & FORMATTING:**
+    *   **Command:** `npm run lint` (or `biome check --apply` for formatting).
+    *   **Configuration:** Defined in `.biome.json` and `vite.config.ts` (for WXT integration).
+    *   **Enforcement:** CI pipeline **MUST** fail on linting errors.
+
+*   **TESTING FRAMEWORK:**
+    *   **Unit/Integration:** `npm run test:unit` (using Vitest).
+    *   **End-to-End:** `npm run test:e2e` (using Playwright).
+    *   **Coverage:** Aim for **90%+ code coverage** on critical modules. Reports generated by Vitest/Istanbul and uploaded via CI.
+    *   **CI Integration:** Tests are executed on every pull request and commit to `main`.
+
+*   **ARCHITECTURE & DESIGN PRINCIPLES:**
+    *   **FSD:** Strictly adhere to Feature-Sliced Design layers (e.g., `app`, `processes`, `pages`, `widgets`, `features`, `entities`, `shared`, `vendor`).
+    *   **SOLID:** Apply all five SOLID principles religiously.
+    *   **DRY:** Eliminate redundant code.
+    *   **YAGNI:** Build only what is needed.
+    *   **Typescript Strictness:** Enable `strict: true` in `tsconfig.json`.
 
 ---
 
-## 5. CORE ARCHITECTURAL PRINCIPLES
-* **SOLID MANDATE:** SRP, OCP, LSP, ISP, DIP.
-* **MODULARITY:** Feature-First Structure (`features/auth`), not type.
-* **CQS:** Methods must be **Commands** (Action) or **Queries** (Data), never both.
-* **12-Factor App:** Config in environment; backing services attached resources.
+## 5. AI AGENT DIRECTIVES FOR "Wryt-AI-Grammar-Writing-Assistant-Browser-Extension"
+
+*   **REPOSITORY NAME:** `Wryt-AI-Grammar-Writing-Assistant-Browser-Extension`
+*   **PRIMARY FUNCTION:** AI Writing Assistant Browser Extension
+*   **KEY TECHNOLOGIES:** TypeScript, React, Tailwind CSS, Vite, WXT, Gemini API, Groq API, OpenRouter API.
+*   **CORE VALUE PROPOSITION:** Elevates writing with a multi-LLM waterfall for grammar, brand voice enforcement, and speech-to-text optimization. A hyper-aware technical editor for every text field.
+
+**SPECIFIC AGENT MODIFIERS:**
+
+1.  **LLM WATERFALL CONFIGURATION (`src/shared/api/llm-waterfall.ts` or similar):**
+    *   **Priority:** Gemini (via Google Cloud SDK), Groq (via Groq SDK), OpenRouter (via OpenRouter SDK).
+    *   **Logic:** Implement robust retry mechanisms, load balancing (if applicable), and error aggregation across LLM providers.
+    *   **Parameter Tuning:** Default to optimized parameters for grammar correction, brand voice alignment, and speech-to-text transcription (e.g., `temperature=0.7`, `max_tokens=1024`).
+    *   **API Key Management:** **NEVER** hardcode API keys. Utilize environment variables (`.env` files, WXT's secret management) and ensure keys are securely handled.
+
+2.  **BRAND VOICE ENFORCEMENT MODULE (`src/features/brand-voice` or similar):
+    *   **Input:** User-defined brand guidelines (keywords, tone, phrasing).
+    *   **Mechanism:** Leverage LLM prompts to analyze input text against guidelines. Provide actionable suggestions.
+
+3.  **SPEECH-TO-TEXT OPTIMIZATION (`src/features/speech-to-text` or similar):
+    *   **Integration:** If possible, integrate with browser APIs or external STT services for real-time transcription.
+    *   **Purpose:** Optimize transcribed text for clarity, conciseness, and adherence to grammatical standards.
+
+4.  **USER INTERFACE (React + Tailwind CSS):**
+    *   **Component Structure:** Follow FSD principles. Utilize reusable UI components.
+    *   **Reactivity:** Employ **Signals** for state management within React components for optimal performance.
+    *   **Styling:** Apply Tailwind CSS utility classes consistently.
+    *   **WXT Integration:** Ensure seamless integration with WXT for content scripts, background scripts, and popup/options UIs.
+
+5.  **TESTING STRATEGY:**
+    *   **Mocking:** Mock LLM API calls extensively during unit and integration testing using Vitest.
+    *   **E2E Testing:** Use Playwright to simulate user interactions within a browser environment, testing core workflows like text input, AI analysis, and suggestion application.
+
+6.  **SECURITY CONSIDERATIONS:**
+    *   **Data Privacy:** Handle user text data with utmost care. Clearly define what data is processed locally vs. sent to LLM APIs. Ensure compliance with relevant privacy regulations (GDPR, CCPA).
+    *   **API Security:** Implement rate limiting and input validation to protect against abuse.
 
 ---
 
-## 6. CODE HYGIENE & STANDARDS (READABILITY FIRST)
-* **SEMANTIC NAMING PROTOCOL:**
-    * **Descriptive Verbs:** `calculateWeeklyPay` (Good) vs `calc` (Bad).
-    * **Casing:** `camelCase` (JS/TS), `snake_case` (Python), `PascalCase` (Classes).
-* **CLEAN CODE RULES:**
-    * **Verticality:** Optimize for reading down.
-    * **No Nesting:** Use **Guard Clauses** (`return early`).
-    * **DRY & KISS:** Automate repetitive tasks. Keep logic simple.
-    * **Zero Comments:** Code must be **Self-Documenting**. Use comments *only* for "Why".
+## 6. APEX REPOSITORY PROTOCOL COMPLIANCE
 
----
-
-## 7. RELIABILITY, SECURITY & SUSTAINABILITY
-* **DEVSECOPS PROTOCOL:**
-    * **Zero Trust:** Sanitize **ALL** inputs (OWASP Top 10 2025).
-    * **Supply Chain:** Generate **SBOMs** for all builds.
-    * **Fail Fast:** Throw errors immediately on invalid state.
-    * **Encryption:** Secure sensitive data at rest and in transit.
-* **EXCEPTION HANDLING:**
-    * **Resilience:** App must **NEVER** crash. Wrap critical I/O in `try-catch-finally`.
-    * **Recovery:** Implement retry logic with exponential backoff.
-* **GREEN SOFTWARE:**
-    * **Rule of Least Power:** Choose the lightest tool for the job.
-    * **Efficiency:** Optimize loops ($O(n)$ over $O(n^2)$).
-    * **Lazy Loading:** Load resources only when needed.
-
----
-
-## 8. COMPREHENSIVE TESTING STRATEGY
-* **FOLDER SEPARATION PROTOCOL:**
-    * **Production Purity:** Source folder is for code ONLY.
-    * **Mirror Structure:** Tests reside exclusively in `tests/`.
-* **TESTING PYRAMID (F.I.R.S.T.):**
-    * **Fast:** Tests run in milliseconds.
-    * **Isolated:** No external dependencies (Mock DB/Network).
-    * **Repeatable:** Deterministic results.
-* **COVERAGE MANDATE:**
-    * **1:1 Mapping:** Every source file **MUST** have a corresponding test file.
-    * **Scenario Coverage:** Test **Success**, **Failure**, and **Edge Cases**.
-    * **Zero-Error Standard:** Software must run with 0 console errors.
-
----
-
-## 9. UI/UX AESTHETIC SINGULARITY (2026 STANDARD)
-* **VISUAL LANGUAGE:**
-    * **Style:** Blend **Liquid Glass** + **Neo-Brutalist** + **Material You 3.0**.
-    * **Motion:** **MANDATORY** fluid animations (`transition: all 0.2s`).
-* **PERFORMANCE UX:**
-    * **INP Optimization:** Interaction to Next Paint < 200ms.
-    * **Optimistic UI:** UI updates instantly; server syncs in background.
-* **INTERACTION DESIGN:**
-    * **Hyper-Personalization:** Adapt layouts based on user behavior.
-    * **Micro-interactions:** Every click/hover must have feedback.
-* **HYPER-CONFIGURABILITY:**
-    * **Mandate:** Every feature/color must be user-configurable via Settings.
-
----
-
-## 10. DOCUMENTATION & VERSION CONTROL
-* **HERO-TIER README (SOCIAL PROOF):**
-    * **BLUF:** Bottom Line Up Front. Value prop first.
-    * **Live Sync:** Update README **IN THE SAME TURN** as code changes.
-    * **Visuals:** High-Res Badges (Shields.io), ASCII Architecture Trees.
-    * **AI Replication Block:** Include `<details>` with stack info for other agents.
-    * **Social Proof:** Explicitly ask users to **"Star ⭐ this Repo"**.
-* **ADVANCED GIT OPERATIONS:**
-    * **Context Archaeology:** Use `git log`/`git blame`.
-    * **Conventional Commits:** Strict format (`feat:`, `fix:`, `docs:`).
-    * **Semantic Versioning:** Enforce `Major.Minor.Patch`.
-
----
-
-## 11. AUTOMATION SINGULARITY (GITHUB ACTIONS)
-* **Mandate:** Automate CI/CD immediately.
-* **Workflows:**
-    1.  **Integrity:** Lint + Test on Push.
-    2.  **Security:** Audit dependencies + SBOM.
-    3.  **Release:** Semantic Versioning + Artifact Upload.
-    4.  **Deps:** Auto-merge non-breaking updates.
-
----
-
-## 12. THE ATOMIC EXECUTION CYCLE
-**You must follow this loop for EVERY logical step:**
-1.  **Audit:** Scan state (`ls -R`) & History (`git log`).
-2.  **Research:** Query Best Practices & Trends.
-3.  **Plan:** Architect via `clear-thought-two`.
-4.  **Act:** Fix Code + Polish + Add Settings + Write Tests.
-5.  **Automate:** Create/Update CI/CD YAMLs.
-6.  **Docs:** Update `README.md` (Replication Ready).
-7.  **Verify:** Run Tests & Linters.
-8.  **REITERATE:** If *any* error/warning exists, fix it immediately.
-    **DO NOT STOP** until the build is perfectly clean.
-9.  **Commit:** `git commit` immediately (Only when clean)
+*   **METADATA:** Repository name, description, and topics MUST be updated and optimized according to the APEX STAR VELOCITY ENGINE and PROTOCOL specifications.
+*   **LIFECYCLE:** This repository is **ACTIVE** and subject to continuous development and refinement. Archival protocols do not apply.
+*   **TECHNOLOGY STACK:** Adherence to the **LATE 2025 STANDARDS** for the identified **WEB / APP / EXTENSION** scenario is MANDATORY.
+*   **LINKING:** All internal and external links, especially within `README.md` and badges, MUST use the canonical repository URL: `https://github.com/chirag127/Wryt-AI-Grammar-Writing-Assistant-Browser-Extension`.
